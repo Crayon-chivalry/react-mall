@@ -1,0 +1,68 @@
+.cards {
+  @include flex-column;
+  gap: $space-4;
+  padding: 0 $space-3;
+}
+
+.user {
+  @include flex-column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: $space-3;
+  padding: $space-1 * 8 0 $space-6;
+  background-image: linear-gradient(to bottom, #ffdfda, #fce3e7, #f6e8ef, #f2eef3, #f2f2f2);
+
+  .avatar {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+  }
+
+  .user-name {
+    font-size: 20px;
+  }
+
+  .user-phone {
+    margin-top: $space-1;
+    color: $color-text-secondary;
+  }
+}
+
+.order {
+  display: flex;
+  text-align: center;
+  font-size: 12px;
+
+  .order-item {
+    flex: 1;
+  }
+
+  .order-image {
+    margin-bottom: $space-1;
+    width: 30px;
+  }
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: $space-3;
+
+  .actions-item {
+    text-align: center;
+    font-size: 12px;
+  }
+
+  .actions-image {
+    margin-bottom: $space-1;
+    width: 25px;
+  }
+}
+
+.extra {
+  @include flex-center;
+  gap: $space-1;
+  font-size: 13px;
+  color: $color-text-secondary;
+}

@@ -1,0 +1,28 @@
+// ==============================
+// 全局主题变量
+// ==============================
+$color-primary: #E61E1E; // 主题色
+$color-danger: #FF9500; // 警告色
+$color-text: #1A1A1A; // 主文本色
+$color-text-secondary: #5F6161; // 次文本色
+
+// ==============================
+// 间距
+// ==============================
+$space-unit: 4px;
+$space-1: $space-unit;
+$space-2: $space-unit * 2;
+$space-3: $space-unit * 3;
+$space-4: $space-unit * 4;
+$space-6: $space-unit * 6;
+
+// ==============================
+// 圆角
+// ==============================
+$radius-unit: 2px;
+$radius-1: $radius-unit;
+$radius-2: $radius-unit * 2;
+$radius-3: $radius-unit * 3;
+$radius-4: $radius-unit * 4;
+$radius-6: $radius-unit * 6;
+$radius-round: 50%;

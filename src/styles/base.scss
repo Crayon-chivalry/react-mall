@@ -1,0 +1,22 @@
+// ==============================
+// 全局基础样式
+// ==============================
+@use 'variables' as *;
+
+:root {
+  --adm-color-primary: #{$color-primary};
+}
+
+body {
+  font-size: 14px;
+  color: $color-text;
+  background-color: #f2f2f2;
+}
+
+img {
+  display: inline-block;
+}
+
+.adm-input {
+  --font-size: 14px;
+}

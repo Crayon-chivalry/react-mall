@@ -1,0 +1,10 @@
+@use '../../styles/variables' as *;
+
+.button {
+  color: $color-primary;
+  background-color: $color-primary;
+}
+
+.text {
+  color: $color-primary;
+}

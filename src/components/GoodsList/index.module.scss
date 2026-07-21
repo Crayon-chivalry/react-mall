@@ -1,0 +1,38 @@
+.my-masonry-grid {
+  padding: $space-3;
+  display: flex;
+  gap: $space-2;
+}
+
+.goods-item {
+  border-radius: $radius-2;
+  background-color: #fff;
+
+  &:nth-child(n+2) {
+    margin-top: $space-2;
+  }
+
+  .goods-cover {
+    display: block;
+    width: 100%;
+    border-radius: $radius-2;
+  }
+
+  .goods-content {
+    padding: $space-2;
+  }
+  
+  .goods-name {
+    @include text-hidden(2)
+  }
+  
+  .goods-price {
+    margin-top: $space-2;
+    color: $color-primary;
+    font-weight: bold;
+
+    span {
+      font-size: 16px;
+    }
+  }
+}
