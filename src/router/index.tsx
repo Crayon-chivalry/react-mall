@@ -8,6 +8,8 @@ import User from "@/pages/User"
 import Login from "@/pages/Auth/Login"
 import Register from "@/pages/Auth/Register"
 import ResetPassword from "@/pages/Auth/ResetPassword"
+import Address from "@/pages/Address/index"
+import AddressForm from "@/pages/Address/AddressForm";
 
 const router = createBrowserRouter([
   {
@@ -43,6 +45,14 @@ const router = createBrowserRouter([
   {
     path: "/reset-password",
     element: <ResetPassword />
+  },
+  {
+    path: "/address",
+    element: <Address />
+  },
+  {
+    path: "/address-form",
+    element: <AddressForm />
   }
 ])
 

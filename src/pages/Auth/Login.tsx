@@ -4,7 +4,9 @@ import { Form, Input, Button, Toast, Dialog, Checkbox } from "antd-mobile";
 import type { FormInstance } from "antd-mobile/es/components/form/form";
 
 import Code from "@/components/Code"
-import type { LoginForm } from "@/api/types"
+import type { LoginParams } from "@/api/types"
+import { userApi } from "@/api/userApi";
+import useUserStore from "@/store/userStore";
 import styles from "./index.module.scss";
 
 interface FormErrorInfo {
@@ -25,6 +27,7 @@ const Login = () => {
   const formRef = useRef<FormInstance | null>(null);
   const [active, setActive] = useState(0);
   const [checked, setChecked] = useState(true); // 是否同意用户协议
+  const { signIn } = useUserStore()
 
   // 跳转页面
   const toPages = (url: string) => {
@@ -45,8 +48,13 @@ const Login = () => {
   };
 
   // 提交
-  const handleSubmit = (values: LoginForm) => {
-    console.log(values);
+  const handleSubmit = async (values: LoginParams) => {
+    const { data: res } = await userApi.login(values)
+    const loginData = res.data
+    Toast.show({ content: res.message });
+    signIn(loginData.accessToken, loginData.user)
+    // 暂，后续修改成哪个页面跳转来就跳回原先页面
+    navigate("/user")
   };
 
   return (

@@ -5,7 +5,8 @@ import type { FormInstance } from "antd-mobile/es/components/form/form";
 import cn from "classnames"
 
 import Code from "@/components/Code"
-import type { LoginForm } from "@/api/types";
+import type { RegisterParams } from "@/api/types";
+import { userApi } from "@/api/userApi";
 import styles from "./index.module.scss";
 
 interface FormErrorInfo {
@@ -17,11 +18,12 @@ interface FormErrorInfo {
 // 表单验证规则
 const rules = {
   phone: [{ required: true, message: "手机号不能为空" }],
+  nickname: [{ required: true, message: "昵称不能为空" }],
   password: [{ required: true, message: "密码不能为空" }],
   passwordConfirm: [
     { required: true, message: "请再次输入密码" },
     ({ getFieldValue }: { getFieldValue: (name: string) => string }) => ({
-      validator(_, value) {
+      validator(_: any, value: string) {
         if (!value) {
           return Promise.resolve();
         }
@@ -50,8 +52,14 @@ const Register = () => {
   };
 
   // 提交
-  const handleSubmit = (values: LoginForm) => {
-    console.log(values);
+  const handleSubmit = async (values: RegisterParams) => {
+    const { data: res } = await userApi.register({
+      phone: values.phone,
+      password: values.password,
+      nickname: values.nickname
+    })
+    Toast.show({ content: res.message });
+    formRef.current?.resetFields()
   };
 
   return (
@@ -67,11 +75,18 @@ const Register = () => {
         onFinishFailed={onFinishFailed}
       >
         <Form.Item
-          name="userid"
+          name="phone"
           rules={rules.phone}
           className={styles["form-item"]}
         >
           <Input placeholder="请输入手机号" />
+        </Form.Item>
+        <Form.Item
+          name="nickname"
+          rules={rules.nickname}
+          className={styles["form-item"]}
+        >
+          <Input placeholder="请输入昵称" />
         </Form.Item>
         <Form.Item
           name="password"
@@ -93,7 +108,7 @@ const Register = () => {
           className={styles["form-item"]}
           extra={<Code type="text" />}
         >
-          <Input placeholder="请输入验证码" />
+          <Input placeholder="请输入验证码(随便填)" />
         </Form.Item>
       </Form>
 

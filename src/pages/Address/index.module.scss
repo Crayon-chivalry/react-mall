@@ -1,0 +1,70 @@
+// index 样式
+.address-list {
+  padding: $space-3 $space-3 64px;
+  @include flex-column($space-3);
+
+  .address-item {
+    padding: $space-3;
+    border-radius: $radius-2;
+    background-color: #fff;
+
+    .address-header {
+      @include flex-between;
+    }
+
+    .address-details {
+      margin-top: $space-3;
+      color: $color-text-secondary;
+      font-size: 13px;
+    }
+
+    .address-footer {
+      margin-top: $space-3;
+      padding-top: $space-3;
+      @include flex-between;
+      border-top: 1px solid $color-border;
+    }
+
+    .checkbox {
+      --font-size: 14px;
+      --icon-size: 18px;
+    }
+
+    .btn-wrap {
+      display: flex;
+      gap: $space-6;
+
+      .btn {
+        display: flex;
+        align-items: center;
+        gap: $space-1;
+      }
+    }
+  }
+}
+
+.footer-fixed {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: $space-3;
+  background-color: #fff;
+}
+
+// AddressForm 样式
+.form-wrap {
+  padding: $space-3;
+
+  .form {
+    --border-bottom: none;
+    --border-top: none;
+    padding: $space-1;
+    background-color: #fff;
+    border-radius: $radius-2;
+  }
+
+  .btn {
+    margin-top: $space-4;
+  }
+}

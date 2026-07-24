@@ -12,13 +12,15 @@
   "dependencies": {
     "antd-mobile": "^5.42.3",
     "antd-mobile-icons": "^0.3.0",
+    "axios": "^1.18.1",
     "classnames": "^2.5.1",
     "normalize.css": "^8.0.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-masonry-css": "^1.0.16",
     "react-router-dom": "^7.18.1",
-    "sass": "^1.101.0"
+    "sass": "^1.101.0",
+    "zustand": "^5.0.14"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

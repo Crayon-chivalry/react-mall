@@ -2,10 +2,13 @@ import { useNavigate } from "react-router-dom";
 import { Card } from "antd-mobile";
 import { RightOutline } from "antd-mobile-icons";
 
+import useUserStore from "@/store/userStore";
+import { maskPhone } from "@/utils/index";
 import styles from "./index.module.scss";
 
 const User = () => {
   const navigate = useNavigate();
+  const { user } = useUserStore()
 
   const handleNavigate = (path: string) => {
     navigate(path);
@@ -16,8 +19,8 @@ const User = () => {
       <div className={styles["user"]}>
         <img src="/src/assets/images/tx.png" className={styles["avatar"]} />
         <div>
-          <div className={styles["user-name"]}>admin</div>
-          <div className={styles["user-phone"]}>180****8240</div>
+          <div className={styles["user-name"]}>{ user?.nickname }</div>
+          <div className={styles["user-phone"]}>{ maskPhone(user?.phone) }</div>
         </div>
       </div>
 

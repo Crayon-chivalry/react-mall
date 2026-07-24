@@ -1,19 +1,13 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Swiper } from "antd-mobile";
 import { ScanningOutline, BellOutline, SearchOutline } from "antd-mobile-icons";
 
-import type { GoodsItem } from "@/api/types";
 import GoodsList from "@/components/GoodsList";
+import type { GoodsItem, BannerItem } from "@/api/types";
 import styles from "./index.module.scss";
-
-// 金刚区
-const appList = [
-  { name: "海外购", image: "/src/assets/images/home-grid1.png" },
-  { name: "新人专享", image: "/src/assets/images/home-grid2.png" },
-  { name: "直播", image: "/src/assets/images/home-grid3.png" },
-  { name: "积分商城", image: "/src/assets/images/home-grid4.png" },
-  { name: "附近门店", image: "/src/assets/images/home-grid5.png" },
-];
+import { contentApi } from "@/api/contentApi";
+import HomeNavGrid from "./components/HomeNavGrid";
 
 // 静态商品列表
 const goodsList: GoodsItem[] = [
@@ -51,10 +45,29 @@ const goodsList: GoodsItem[] = [
 
 const Home = () => {
   const navigate = useNavigate();
+  const [banners, setBanners] = useState<BannerItem[]>([]);
+  const [entries, serEntries] = useState([]);
 
   const handleNavigate = (path: string) => {
     navigate(path);
   };
+
+  // 获取轮播图
+  const getBanners = async () => {
+    const { data: res } = await contentApi.banners();
+    setBanners(res.data);
+  };
+
+  // 获取金刚区
+  const getEntries = async () => {
+    const { data: res } = await contentApi.homeEntries();
+    serEntries(res.data);
+  };
+
+  useEffect(() => {
+    getBanners();
+    getEntries();
+  }, []);
 
   return (
     <>
@@ -70,26 +83,26 @@ const Home = () => {
           </div>
           <BellOutline onClick={() => handleNavigate("notice")} />
         </div>
+        <div className={styles["swiper"]}>
+          {/* 还需要处理点击链接的部分 */}
+          <Swiper autoplay loop indicatorProps={{ color: "white" }}>
+            {banners.map((item) => (
+              <Swiper.Item key={item.id}>
+                <img src={item.imageUrl} className={styles["swiper-image"]} />
+              </Swiper.Item>
+            ))}
+          </Swiper>
+        </div>
       </div>
 
-      <Swiper indicatorProps={{ color: "white" }} className={styles["swiper"]}>
-        <Swiper.Item>
-          <img
-            src="/src/assets/images/home-swiper.png"
-            className={styles["swiper-image"]}
-          />
-        </Swiper.Item>
-      </Swiper>
+      {/* 金刚区 */}
+      {entries.length > 0 && (
+        <div className={styles["navigation"]}>
+          <HomeNavGrid items={entries} pageSize={10} />
+        </div>
+      )}
 
-      <div className={styles["navigation"]}>
-        {appList.map((item, index) => (
-          <div className={styles["navigation-item"]} key={index}>
-            <img src={item.image} className={styles["navigation-cover"]} />
-            <div>{item.name}</div>
-          </div>
-        ))}
-      </div>
-
+      {/* 活动专区 */}
       <img
         src="/src/assets/images/home-banner.png"
         className={styles["banner"]}
