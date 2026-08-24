@@ -1,15 +1,18 @@
 import { createBrowserRouter } from "react-router-dom";
 
-import Layout from "@/pages/Layout"
-import Home from "@/pages/Home"
-import Category from "@/pages/Category"
-import Cart from "@/pages/Cart"
-import User from "@/pages/User"
-import Login from "@/pages/Auth/Login"
-import Register from "@/pages/Auth/Register"
-import ResetPassword from "@/pages/Auth/ResetPassword"
-import Address from "@/pages/Address/index"
-import AddressForm from "@/pages/Address/AddressForm";
+import Layout from "@/pages/Layout";
+import Home from "@/pages/Home";
+import Category from "@/pages/Category";
+import Cart from "@/pages/Cart";
+import User from "@/pages/User";
+import Login from "@/pages/Auth/Login";
+import Register from "@/pages/Auth/Register";
+import ResetPassword from "@/pages/Auth/ResetPassword";
+import Address from "@/pages/Address/List";
+import AddressForm from "@/pages/Address/Form";
+import Product from "@/pages/Product/Detail";
+import ProductList from "@/pages/Product/List";
+import Search from "@/pages/Search"
 
 const router = createBrowserRouter([
   {
@@ -18,42 +21,64 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Home />
+        element: <Home />,
       },
       {
         path: "/category",
-        element: <Category />
+        element: <Category />,
       },
       {
         path: "/cart",
-        element: <Cart />
+        element: <Cart />,
       },
       {
         path: "/user",
-        element: <User />
+        element: <User />,
+      },
+    ],
+  },
+  {
+    path: "/login",
+    element: <Login />,
+  },
+  {
+    path: "/register",
+    element: <Register />,
+  },
+  {
+    path: "/reset-password",
+    element: <ResetPassword />,
+  },
+  {
+    path: "/address",
+    children: [
+      {
+        index: true,
+        element: <Address />,
+      },
+      {
+        path: "form",
+        element: <AddressForm />,
+      },
+    ],
+  },
+  {
+    path: "/product",
+    children: [
+      {
+        index: true,
+        element: <Product />,
+      },
+      {
+        path: "list",
+        element: <ProductList />
       }
     ]
   },
   {
-    path: "/login",
-    element: <Login />
+    path: "/search",
+    element: <Search />,
   },
-  {
-    path: "/register",
-    element: <Register />
-  },
-  {
-    path: "/reset-password",
-    element: <ResetPassword />
-  },
-  {
-    path: "/address",
-    element: <Address />
-  },
-  {
-    path: "/address-form",
-    element: <AddressForm />
-  }
-])
+]);
 
-export default router
+export default router;

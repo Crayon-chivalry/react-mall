@@ -1,0 +1,17 @@
+.header {
+  position: sticky;
+  top: 45px;
+  padding: $space-3;
+  background-color: #fff;
+}
+
+.search {
+  padding: 0 $space-2;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  gap: $space-1;
+  background-color: #f5f5f5;
+  border-radius: $radius-2;
+  color: $color-text-secondary;
+}

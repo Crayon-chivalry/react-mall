@@ -1,4 +1,3 @@
-// index 样式
 .address-list {
   padding: $space-3 $space-3 64px;
   @include flex-column($space-3);
@@ -50,21 +49,4 @@
   right: 0;
   padding: $space-3;
   background-color: #fff;
-}
-
-// AddressForm 样式
-.form-wrap {
-  padding: $space-3;
-
-  .form {
-    --border-bottom: none;
-    --border-top: none;
-    padding: $space-1;
-    background-color: #fff;
-    border-radius: $radius-2;
-  }
-
-  .btn {
-    margin-top: $space-4;
-  }
 }

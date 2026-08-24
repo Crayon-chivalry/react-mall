@@ -1,0 +1,42 @@
+.form {
+  margin-top: $space-6;
+  --border-bottom: none;
+  --border-top: none;
+  --border-inner: none;
+
+  .form-item {
+    border-radius: $radius-3;
+    background-color: rgb(246, 246, 246);
+
+    &:nth-child(n + 2) {
+      margin-top: $space-4;
+    }
+  }
+}
+
+.btn {
+  margin-top: $space-6;
+}
+
+.page {
+  min-height: 100vh;
+  padding: $space-2 * 14 $space-4 $space-4;
+  box-sizing: border-box;
+  background-color: #fff;
+  background-image: url("@/assets/images/login-bg.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: bold;
+}
+.links {
+  margin-top: $space-6;
+  font-size: 12px;
+  color: $color-text-secondary;
+}
+.links-center {
+  @include flex-center;
+}

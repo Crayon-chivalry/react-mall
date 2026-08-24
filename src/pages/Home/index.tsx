@@ -3,50 +3,18 @@ import { useNavigate } from "react-router-dom";
 import { Swiper } from "antd-mobile";
 import { ScanningOutline, BellOutline, SearchOutline } from "antd-mobile-icons";
 
-import GoodsList from "@/components/GoodsList";
-import type { GoodsItem, BannerItem } from "@/api/types";
+import ProductCard from "@/components/ProductCard";
+import type { ProductItem, BannerItem, EntriesItem } from "@/api/types";
 import styles from "./index.module.scss";
 import { contentApi } from "@/api/contentApi";
+import { shopApi } from "@/api/shopApi";
 import HomeNavGrid from "./components/HomeNavGrid";
-
-// 静态商品列表
-const goodsList: GoodsItem[] = [
-  {
-    id: 1,
-    name: "SK-II神仙水精华液面霜保湿紧致护肤礼盒礼物",
-    price: 2448,
-    cover: "/src/assets/images/goods/SK-II.jpg",
-  },
-  {
-    id: 2,
-    name: "心相印茶语抽纸整箱",
-    price: 26.91,
-    cover: "/src/assets/images/goods/zhijin.jpg",
-  },
-  {
-    id: 3,
-    name: "豆本豆唯甄原味豆奶250ml*24盒营养早餐奶多口味植物蛋白饮品整箱",
-    price: 29.31,
-    cover: "/src/assets/images/goods/dounai.jpg",
-  },
-  {
-    id: 4,
-    name: "海信空调易省电ProE370大3匹一级变频家用客厅立式柜机",
-    price: 3569.06,
-    cover: "/src/assets/images/goods/haixin.jpg",
-  },
-  {
-    id: 5,
-    name: "OPPO一加 Ace 5 新品学生游戏性能手机第三代骁龙 8",
-    price: 1982.7,
-    cover: "/src/assets/images/goods/ace5.jpg",
-  },
-];
 
 const Home = () => {
   const navigate = useNavigate();
   const [banners, setBanners] = useState<BannerItem[]>([]);
-  const [entries, serEntries] = useState([]);
+  const [entries, setEntries] = useState<EntriesItem[]>([]);
+  const [goods, setGoods] = useState<ProductItem[]>([])
 
   const handleNavigate = (path: string) => {
     navigate(path);
@@ -61,12 +29,19 @@ const Home = () => {
   // 获取金刚区
   const getEntries = async () => {
     const { data: res } = await contentApi.homeEntries();
-    serEntries(res.data);
+    setEntries(res.data);
   };
+
+  // 获取商品列表
+  const getGoods = async () => {
+    const { data: res } = await shopApi.goodsList({ page: 1, pageSize: 100 })
+    setGoods(res.data.list)
+  }
 
   useEffect(() => {
     getBanners();
     getEntries();
+    getGoods()
   }, []);
 
   return (
@@ -127,7 +102,7 @@ const Home = () => {
         </div>
       </div>
 
-      <GoodsList list={goodsList} />
+      <ProductCard list={goods} />
     </>
   );
 };

@@ -7,18 +7,28 @@ export const addressApi = {
     return request.get<ApiResponse>("/shipping-addresses")
   },
 
+  // 地址详情
+  details: (id: number) => {
+    return request.get<ApiResponse>(`/shipping-addresses/${id}`)
+  },
+
   // 添加地址
   add: (params: AddressItem) => {
     return request.post<ApiResponse>("/shipping-addresses", params)
   },
 
   // 修改地址
-  update: (params: AddressItem) => {
-    return request.patch<ApiResponse>("/shipping-addresses", params)
+  update: (id: number, params: AddressItem) => {
+    return request.patch<ApiResponse>(`/shipping-addresses/${id}`, params)
   },
 
   // 删除地址
   delete: (id: number) => {
-    return request.patch<ApiResponse>(`/shipping-addresses/${id}`)
+    return request.delete<ApiResponse>(`/shipping-addresses/${id}`)
   },
+
+  // 设置默认
+  default: (id: number) => {
+    return request.patch<ApiResponse>(`/shipping-addresses/${id}/default`)
+  } 
 }

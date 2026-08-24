@@ -1,0 +1,40 @@
+.page {
+  min-height: 100vh;
+  background-color: #fff;
+}
+
+.search {
+  padding: $space-2;
+  background-color: #fff;
+}
+
+.record {
+  padding: $space-3;
+}
+
+.record-header {
+  @include flex-between;
+
+  .record-header-right {
+    display: flex;
+    gap: $space-2;
+    color: $color-text-secondary;
+  }
+}
+
+.record-list {
+  margin-top: $space-3;
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-3;
+
+  .record-item {
+    padding: $space-2;
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    font-size: 12px;
+    border-radius: $radius-2;
+    background-color: #f5f5f5;
+  }
+}

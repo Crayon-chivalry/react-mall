@@ -1,0 +1,15 @@
+.form-wrap {
+  padding: $space-3;
+
+  .form {
+    --border-bottom: none;
+    --border-top: none;
+    padding: $space-1;
+    background-color: #fff;
+    border-radius: $radius-2;
+  }
+
+  .btn {
+    margin-top: $space-4;
+  }
+}

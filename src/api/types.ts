@@ -34,6 +34,16 @@ export interface BannerItem {
   title: string
 }
 
+// 金刚区
+export interface EntriesItem {
+  id: number
+  title: string
+  iconUrl: string
+  linkUrl: string
+  sort: number
+  isEnabled: boolean
+}
+
 // 分类
 export interface CategoriesItem {
   id: number
@@ -43,16 +53,45 @@ export interface CategoriesItem {
   children: CategoriesItem[]
 }
 
-// 商品 暂
-export interface GoodsItem {
-  id: number
-  cover: string
+// 商品
+export interface SpecsItem {
   name: string
-  price: number
+  value: string
+}
+
+export interface SkuItem {
+  title: string
+  specs: SpecsItem[]
+  price: string
+  stock: number
+  cover: string
+  isDefault: boolean
+}
+
+export interface ProductItem {
+  id: number
+  name: string
+  price: string
+  stock: number
+  sales: number
+  categoryId: number
+  cover: string
+  images: string[]
+  description: string
+  detailContent: string
+  isOnSale: boolean
+  skus: SkuItem[]
+  category: CategoriesItem
+  specType: "single" | "multi"
+}
+
+export interface ProductListParams extends Pagination {
+  keyword?: string | null
 }
 
 // 地址
 export interface AddressItem {
+  id: number
   receiverName: string
   receiverPhone: number
   province: string

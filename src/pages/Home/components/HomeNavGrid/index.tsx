@@ -1,14 +1,9 @@
 import { Swiper } from "antd-mobile";
 import styles from "./index.module.scss";
-
-type NavItem = {
-  title: string;
-  iconUrl: string;
-  id: number;
-};
+import type { EntriesItem } from "@/api/types"
 
 interface Props {
-  items?: NavItem[];
+  items?: EntriesItem[];
   pageSize?: number; // items per page (default 10)
 }
 

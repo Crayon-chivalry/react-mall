@@ -1,0 +1,50 @@
+.swiper {
+  aspect-ratio: 1;
+  overflow: hidden;
+
+  .swiper-image {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+  }
+}
+
+.base-info {
+  padding: $space-3;
+  background-color: #fff;
+
+  .price {
+    color: $color-primary;
+
+    span {
+      font-size: 21px;
+      font-weight: 600;
+    }
+  }
+
+  .sales {
+    color: $color-text-secondary;
+  }
+
+  .name {
+    margin-top: $space-3;
+    font-size: 16px;
+    font-weight: 600;
+  }
+}
+
+.details {
+  margin-top: $space-3;
+  background-color: #fff;
+
+  .details-title {
+    padding: $space-3;
+    border-bottom: 1px solid $color-border;
+  }
+
+  img {
+    display: block;
+    width: 100%;
+  }
+}
