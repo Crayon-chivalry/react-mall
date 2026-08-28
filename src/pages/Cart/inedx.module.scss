@@ -1,0 +1,88 @@
+.nav-bar {
+  background-color: #fff;
+}
+
+.goods {
+  margin-top: $space-2;
+  @include flex-column($space-2);
+
+  .goods-item {
+    display: flex;
+    gap: $space-3;
+    padding: $space-2;
+    background-color: #fff;
+  }
+}
+
+.goods-cover {
+  width: 80px;
+  height: 80px;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.goods-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  .goods-name {
+    @include text-hidden(2)
+  }
+
+  .goods-label {
+    margin-top: $space-2;
+    color: $color-text-secondary;
+    font-size: 12px;
+  }
+
+  .goods-cell {
+    @include flex-between;
+  }
+
+  .goods-price {
+    color: #e02020;
+  }
+}
+
+.submit-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 50px;
+  padding: $space-2 $space-3;
+  @include flex-between;
+  background-color: #fff;
+
+  .submit-left {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+  }
+
+  .submit-content {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+  }
+
+  .submit-amount {
+    font-size: 16px;
+    font-weight: bold;
+    color: $color-primary;
+  }
+
+  .submit-btn {
+    padding: $space-2 + 2 0;
+    width: 100px;
+    color: #fff;
+    text-align: center;
+    border-radius: $radius-2;
+    background-color: $color-primary;
+  }
+}

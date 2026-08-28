@@ -1,0 +1,44 @@
+.total {
+  padding: $space-6 0;
+  text-align: center;
+  @include flex-column($space-2);
+
+  .amount {
+    font-size: 34px;
+    font-weight: 600;
+  }
+}
+
+.types {
+  padding: 0 $space-4;
+
+  .types-title {
+    margin-bottom: $space-3;
+    font-weight: 600;
+  }
+
+  .type-item {
+    padding: $space-3 0;
+    @include flex-between;
+
+    .type-left {
+      display: flex;
+      align-items: center;
+      gap: $space-2;
+    }
+
+    .type-icon {
+      width: 30px;
+    }
+  }
+}
+
+.btn {
+  position: fixed;
+  height: 40px;
+  @include flex-center;
+  background-color: $color-primary;
+  inset: auto $space-3 $space-3;
+  color: #fff;
+  font-size: 16px;
+}

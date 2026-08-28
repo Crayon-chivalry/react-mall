@@ -5,7 +5,7 @@ import Masonry from "react-masonry-css";
 import type { ProductItem } from "@/api/types"
 import styles from "./index.module.scss";
 
-type GoodsListProps = {
+interface GoodsListProps {
   list: ProductItem[]
 }
 

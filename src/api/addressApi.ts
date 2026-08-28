@@ -28,7 +28,12 @@ export const addressApi = {
   },
 
   // 设置默认
-  default: (id: number) => {
+  setDefault: (id: number) => {
     return request.patch<ApiResponse>(`/shipping-addresses/${id}/default`)
-  } 
+  },
+
+  // 获取默认地址
+  default: () => {
+    return request.get<ApiResponse>("/shipping-addresses/default")
+  }
 }

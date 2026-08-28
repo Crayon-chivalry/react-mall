@@ -27,14 +27,6 @@ const SkuPopup = ({
   const [selected, setSelected] = useState<Record<string, string>>({});
   const [quantity, setQuantity] = useState(1);
 
-  // 弹窗每次打开时重置选择状态
-  useEffect(() => {
-    if (visible) {
-      setSelected({});
-      setQuantity(1);
-    }
-  }, [visible]);
-
   // 从 skus 中提取规格分组：[{ name: "颜色", values: ["红色", "蓝色"] }]
   // 过滤空规格（单规格商品的 specs 可能为 [{ name: "", value: "" }]）
   const specGroups = useMemo(() => {
@@ -53,6 +45,18 @@ const SkuPopup = ({
     });
     return Array.from(map, ([name, values]) => ({ name, values }));
   }, [goods]);
+
+  // 弹窗每次打开时重置选择状态（多规格商品默认选中每组第一个规格）
+  useEffect(() => {
+    if (visible) {
+      const defaultSelected: Record<string, string> = {};
+      specGroups.forEach((group) => {
+        defaultSelected[group.name] = group.values[0];
+      });
+      setSelected(defaultSelected);
+      setQuantity(1);
+    }
+  }, [visible, specGroups]);
 
   // 是否多规格商品
   const isMultiSpec = specGroups.length > 0;

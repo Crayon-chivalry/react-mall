@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import DOMPurify from 'dompurify';
-import { Swiper, ImageViewer, Space } from "antd-mobile";
+import { Swiper, ImageViewer, Space, Toast } from "antd-mobile";
 
 import { shopApi } from "@/api/shopApi";
 import type { ProductItem, SkuItem } from "@/api/types";
@@ -9,6 +9,7 @@ import styles from "./index.module.scss";
 import AppNavBar from "@/components/AppNavBar";
 import ActionBar from "../components/ActionBar"
 import SkuPopup, { type SkuPopupMode } from "../components/SkuPopup"
+import useProductStore from "@/store/productStore";
 
 const Product = () => {
   const [searchParams] = useSearchParams();
@@ -19,6 +20,7 @@ const Product = () => {
   // 规格弹窗
   const [skuVisible, setSkuVisible] = useState<boolean>(false);
   const [skuMode, setSkuMode] = useState<SkuPopupMode>("cart");
+  const addCartItem = useProductStore((state) => state.addCartItem);
 
   // 打开规格弹窗（cart=加入购物车 buy=立即购买）
   const openSkuPopup = (mode: SkuPopupMode) => {
@@ -29,7 +31,12 @@ const Product = () => {
   // 规格弹窗确认回调
   const handleSkuConfirm = (sku: SkuItem, quantity: number) => {
     if (skuMode === "cart") {
-      console.log("加入购物车:", sku, "数量:", quantity);
+      if (pageData) {
+        addCartItem(pageData, sku, quantity);
+        Toast.show({
+          content: "加入购物车成功",
+        });
+      }
     } else {
       console.log("立即购买:", sku, "数量:", quantity);
     }

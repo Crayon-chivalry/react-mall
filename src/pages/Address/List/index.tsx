@@ -23,7 +23,7 @@ const Address = () => {
   
   const checkChange = async (val: boolean, id: number) => {
     if(!val) return
-    const { data: res } = await addressApi.default(id)
+    const { data: res } = await addressApi.setDefault(id)
     Toast.show({ icon: 'success', content: res.message })
     setTimeout(() => {
       getAddress()

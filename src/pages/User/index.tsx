@@ -28,7 +28,7 @@ const User = () => {
         <Card
           title="我的订单"
           extra={
-            <div className={styles["extra"]}>
+            <div className={styles["extra"]} onClick={() => navigate("/order/list")}>
               <span>全部订单</span>
               <RightOutline />
             </div>

@@ -13,6 +13,8 @@ import AddressForm from "@/pages/Address/Form";
 import Product from "@/pages/Product/Detail";
 import ProductList from "@/pages/Product/List";
 import Search from "@/pages/Search"
+import OrderConfirm from "@/pages/Order/Confirm";
+import OrderList from "@/pages/Order/List"
 
 const router = createBrowserRouter([
   {
@@ -72,6 +74,19 @@ const router = createBrowserRouter([
       {
         path: "list",
         element: <ProductList />
+      }
+    ]
+  },
+  {
+    path: "/order",
+    children: [
+      {
+        path: "confirm",
+        element: <OrderConfirm />
+      },
+      {
+        path: "list",
+        element: <OrderList />
       }
     ]
   },
