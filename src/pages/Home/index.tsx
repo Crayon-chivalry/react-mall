@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Swiper } from "antd-mobile";
+import { Swiper, Toast } from "antd-mobile";
 import { ScanningOutline, BellOutline, SearchOutline } from "antd-mobile-icons";
 
 import ProductCard from "@/components/ProductCard";
@@ -48,7 +48,7 @@ const Home = () => {
     <>
       <div className={styles["header"]}>
         <div className={styles["header-row"]}>
-          <ScanningOutline />
+          <ScanningOutline onClick={() => Toast.show({content: "暂未开放"})} />
           <div
             className={styles["search"]}
             onClick={() => handleNavigate("/search")}

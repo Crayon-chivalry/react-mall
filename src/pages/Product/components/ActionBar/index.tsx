@@ -1,3 +1,6 @@
+import { useNavigate } from "react-router-dom";
+import { Toast } from 'antd-mobile'
+
 import styles from "./index.module.scss";
 
 interface ActionBarProps {
@@ -8,20 +11,22 @@ interface ActionBarProps {
 }
 
 const ActionBar = ({ onAddCart, onBuy }: ActionBarProps) => {
+  const navigate = useNavigate()
+
   return (
     <>
       <div className={styles["placeholder"]}></div>
 
       <div className={styles["action-bar"]}>
         <div className={styles["bar-icons"]}>
-          <div className={styles["icon-item"]}>
+          <div className={styles["icon-item"]} onClick={() => Toast.show({content: "暂未开放"})}>
             <img
               src="/src/assets/images/bar-service.png"
               className={styles["icon"]}
             />
             <div>客服</div>
           </div>
-          <div className={styles["icon-item"]}>
+          <div className={styles["icon-item"]} onClick={() => navigate("/Cart")}>
             <img
               src="/src/assets/images/bar-cart.png"
               className={styles["icon"]}

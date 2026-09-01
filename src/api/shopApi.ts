@@ -28,7 +28,18 @@ export const shopApi = {
     return request.post<ApiResponse>("/orders", params);
   },
 
+  // 订单列表
   orderList: (params: OrderListParams) => {
     return request.get<ApiResponse>("/orders", {params});
   },
+
+  // 订单支付
+  orderPayment: (id: number, type: string) => {
+    return request.post<ApiResponse>(`/orders/${id}/pay`, { paymentType: type });
+  },
+
+  // 订单数徽标
+  orderBadges: () => {
+    return request.get<ApiResponse>("/orders/badges");
+  }
 };

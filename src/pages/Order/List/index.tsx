@@ -1,35 +1,67 @@
 import { useEffect, useState } from "react";
-import { Tabs, Button } from "antd-mobile";
+import { useSearchParams } from "react-router-dom";
+import { Tabs, Button, Dialog, ErrorBlock } from "antd-mobile";
 
-import type { OrderItem } from "@/api/types";
+import type { OrderItem, OrderStatus } from "@/api/types";
 import { shopApi } from "@/api/shopApi";
 import { formatSpecsLabel } from "@/utils/index";
 import styles from "./index.module.scss";
 import AppNavBar from "@/components/AppNavBar";
-import PaymentPopup from "../components/PaymentPopup"
+import PaymentPopup from "../components/PaymentPopup";
 
-const tabs = [
-  { name: "全部", value: 99 },
-  { name: "待付款", value: 0 },
-  { name: "待发货", value: 1 },
-  { name: "待收货", value: 2 },
-  { name: "待评价", value: 3 },
-];
+type OrderTabStatus = OrderStatus | "all";
+
+const statusList = [
+  { name: "全部", value: "all" },
+  { name: "待付款", value: "pending" },
+  { name: "待发货", value: "paid" },
+  { name: "待收货", value: "shipped" },
+  { name: "已完成", value: "completed" },
+] satisfies { name: string; value: OrderTabStatus }[];
+
+const isValidTabStatus = (value: string | null): value is OrderTabStatus =>
+  !!value && statusList.some((item) => item.value === value);
+
+const statusNames: Record<OrderStatus, string> = {
+  pending: "待付款",
+  paid: "待发货",
+  shipped: "待收货",
+  completed: "已完成",
+};
 
 const OrderList = () => {
-  const [activeKey, setActiveKey] = useState<string>("99");
+  const [searchParams] = useSearchParams();
+  const paramsStatus = searchParams.get("status");
+  const [status, setStatus] = useState<OrderTabStatus>(
+    isValidTabStatus(paramsStatus) ? paramsStatus : "all"
+  );
   const [list, setList] = useState<OrderItem[]>([]);
-  const [visible, setVisible] = useState<boolean>(false)
-  const [activeOrder, setActiveOrder] = useState<OrderItem | null>(null)
+  const [visible, setVisible] = useState<boolean>(false);
+  const [activeOrder, setActiveOrder] = useState<OrderItem | null>(null);
 
+  // 关闭付款弹框
+  const closePaymentPopup = () => setVisible(false)
+
+  // tabs 变化
   const onChange = (key: string) => {
-    setActiveKey(key);
+    console.log(key)
+    setStatus(key as OrderTabStatus);
   };
 
   // 点击去付款按钮, 显示付款弹框
   const paymentClick = (item: OrderItem) => {
-    setActiveOrder(item)
-    setVisible(true)
+    setActiveOrder(item);
+    setVisible(true);
+  };
+
+  // 取消订单
+  const cancelOrder = () => {
+    Dialog.confirm({
+      content: "确定要取消订单吗？",
+      onConfirm: () => {
+        console.log("确定取消")
+      }
+    })
   }
 
   // 获取订单列表
@@ -37,6 +69,7 @@ const OrderList = () => {
     const { data: res } = await shopApi.orderList({
       page: 1,
       pageSize: 10,
+      ...(status !== "all" ? { status } : {}),
     });
     console.log(res);
     setList(res.data.list);
@@ -44,18 +77,18 @@ const OrderList = () => {
 
   useEffect(() => {
     getOrderList();
-  }, []);
+  }, [status]);
 
   return (
     <>
       <AppNavBar title="我的订单" />
 
       <Tabs
-        activeKey={activeKey}
+        activeKey={status}
         className={styles["tabs"]}
         onChange={onChange}
       >
-        {tabs.map((item) => (
+        {statusList.map((item) => (
           <Tabs.Tab title={item.name} key={item.value}></Tabs.Tab>
         ))}
       </Tabs>
@@ -65,9 +98,11 @@ const OrderList = () => {
           <div className={styles["order-item"]} key={item.id}>
             <div className={styles["order-header"]}>
               <div className={styles["order-no"]}>订单号：{item.orderNo}</div>
-              <div className={styles["order-status"]}>待付款</div>
+              <div className={styles["order-status"]}>
+                {statusNames[item.status]}
+              </div>
             </div>
-            <div className={styles["order-goods"]}> 
+            <div className={styles["order-goods"]}>
               {item.items.map((p) => (
                 <div className={styles["goods-item"]} key={p.id}>
                   <div className={styles["goods-content"]}>
@@ -78,7 +113,9 @@ const OrderList = () => {
                       <div className={styles["goods-name"]}>
                         {p.productName}
                       </div>
-                      <div className={styles["goods-label"]}>{formatSpecsLabel(p.skuSpecs)}</div>
+                      <div className={styles["goods-label"]}>
+                        {formatSpecsLabel(p.skuSpecs)}
+                      </div>
                     </div>
                   </div>
                   <div className={styles["goods-right"]}>
@@ -92,21 +129,31 @@ const OrderList = () => {
               <div className={styles["order-total"]}>
                 共1件商品 合计：<strong>¥{item.totalAmount}</strong>
               </div>
-              <div className={styles["btn-wrap"]}>
-                <Button size="small" shape='rounded'>
-                  取消订单
-                </Button>
-                <Button color="primary" size="small" shape='rounded' onClick={() => paymentClick(item)}>
-                  去付款
-                </Button>
-              </div>
+
+              {item.status === "pending" && (
+                <div className={styles["btn-wrap"]}>
+                  <Button size="small" shape="rounded" onClick={cancelOrder}>
+                    取消订单
+                  </Button>
+                  <Button
+                    color="primary"
+                    size="small"
+                    shape="rounded"
+                    onClick={() => paymentClick(item)}
+                  >
+                    去付款
+                  </Button>
+                </div>
+              )}
             </div>
           </div>
         ))}
       </div>
 
+      {list.length === 0 && <ErrorBlock status='empty' />}
+
       {/* 支付弹框 */}
-      <PaymentPopup visible={visible} order={activeOrder} />
+      <PaymentPopup visible={visible} order={activeOrder} handleClose={closePaymentPopup} />
     </>
   );
 };

@@ -7,74 +7,75 @@
 
 .order-list {
   padding: $space-3;
+  @include flex-column($space-3);
 }
 
 .order-item {
   padding: $space-3;
   border-radius: $radius-2;
   background-color: #fff;
-}
 
-.order-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-bottom: $space-3;
-  border-bottom: 1px solid $color-border;
-}
+  .order-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: $space-3;
+    border-bottom: 1px solid $color-border;
 
-.order-status {
-  color: $color-primary;
+    .order-status {
+      color: $color-primary;
+    }
+  }
 }
 
 .order-goods {
   padding: $space-4 0 $space-2;
   @include flex-column($space-1);
-}
 
-.goods-item {
-  display: flex;
-  gap: $space-3;
-}
+  .goods-item {
+    display: flex;
+    gap: $space-3;
 
-.goods-content {
-  display: flex;
-  flex: 1;
-  min-width: 0;
-  gap: $space-3;
-}
+    .goods-content {
+      display: flex;
+      flex: 1;
+      min-width: 0;
+      gap: $space-3;
+    }
 
-.goods-cover {
-  display: block;
-  flex: 0 0 60px;
-  width: 60px;
-  height: 60px;
+    .goods-cover {
+      display: block;
+      flex: 0 0 60px;
+      width: 60px;
+      height: 60px;
 
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+
+    .goods-content > div:not(.goods-cover) {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .goods-name {
+      @include text-hidden(2);
+    }
+
+    .goods-label {
+      margin-top: $space-2;
+      color: $color-text-secondary;
+      font-size: 12px;
+    }
+
+    .goods-right {
+      flex: 0 0 auto;
+      text-align: right;
+    }
   }
-}
-
-.goods-content > div:not(.goods-cover) {
-  flex: 1;
-  min-width: 0;
-}
-
-.goods-name {
-  @include text-hidden(2);
-}
-
-.goods-label {
-  margin-top: $space-2;
-  color: $color-text-secondary;
-  font-size: 12px;
-}
-
-.goods-right {
-  flex: 0 0 auto;
-  text-align: right;
 }
 
 .order-footer {

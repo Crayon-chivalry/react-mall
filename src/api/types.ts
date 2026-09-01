@@ -260,12 +260,14 @@ export interface OrderProductItem {
   skuSpecs: SpecsItem[]
 }
 
+export type OrderStatus = "pending" | "paid" | "shipped" | "completed"
+
 export interface OrderItem {
   id: number
   createdAt: string
   orderNo: string
   totalAmount: string
-  status: string
+  status: OrderStatus
   remark: string
   receiverName: string
   receiverPhone: number
@@ -278,5 +280,5 @@ export interface OrderItem {
 }
 
 export interface OrderListParams extends Pagination {
-  status?: "pending" | "paid" | "shipped" | "completed"
+  status?: OrderStatus
 }

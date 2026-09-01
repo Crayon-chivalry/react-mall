@@ -1,0 +1,36 @@
+.container {
+  padding: $space-3;
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+}
+
+.card {
+  padding: 0 $space-3;
+  border-radius: $radius-4;
+  background-color: #fff;
+
+  .card-cell {
+    padding: $space-4 0;
+    @include flex-between;
+    border-bottom: 1px solid $color-border;
+
+    &:last-child {
+      border: none;
+    }
+  }
+
+  .card-label {
+    color: $color-text-secondary;
+  }
+
+  .avatar {
+    width: 30px;
+    border-radius: 99px;
+  }
+}
+
+.logout-btn {
+  margin-top: $space-1;
+  width: 100%;
+}

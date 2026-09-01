@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Tag, Input, Toast } from "antd-mobile";
 import { RightOutline } from "antd-mobile-icons";
 
 import { addressApi } from "@/api/addressApi";
-import type { AddressItem } from "@/api/types";
+import type { AddressItem, OrderItem } from "@/api/types";
 import { shopApi } from "@/api/shopApi";
 import useProductStore from "@/store/productStore";
 import { formatSpecsLabel } from "@/utils";
@@ -12,15 +13,38 @@ import AppNavBar from "@/components/AppNavBar";
 import PaymentPopup from "../components/PaymentPopup";
 
 const OrderConfirm = () => {
-  const checkoutItems = useProductStore((state) => state.checkoutItems);
+  const navigate = useNavigate();
   const [address, setAddress] = useState<AddressItem | null>(null);
   const [remark, setRemark] = useState<string>("")
   const [visible, setVisible] = useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  // const [paymentOrder, setPaymentOrder] = useState<OrderItem | null>(null)
+
+  const paymentOrder = useProductStore((state) => state.paymentOrder);
+  const setPaymentOrder = useProductStore((state) => state.setPaymentOrder);
+  const clearPaymentOrder = useProductStore((state) => state.clearPaymentOrder);
+  const checkoutItems = useProductStore((state) => state.checkoutItems);
+  const removeCartItems = useProductStore((state) => state.removeCartItems)
+
   // 总计
   const totalAmount = checkoutItems.reduce(
     (total, item) => total + Number(item.sku.price),
     0,
   );
+
+  // 打开支付弹框
+  const openPaymentPopup = () => {
+    setVisible(true)
+  }
+
+  // 关闭支付弹框
+  const closePaymentPopup = () => setVisible(false)
+
+  // 支付成功
+  const paymentSuccess = () => {
+    clearPaymentOrder()
+    navigate(-1)
+  }
 
   // 获取默认地址
   const getAddressDefault = async () => {
@@ -30,6 +54,12 @@ const OrderConfirm = () => {
 
   // 提交订单
   const submitOrder = async () => {
+    // 如果订单已创建支付当前订单
+    if(isSubmitting) {
+      openPaymentPopup()
+      return
+    }
+
     if (!address) {
       Toast.show({
         content: "请先添加收货地址",
@@ -49,10 +79,20 @@ const OrderConfirm = () => {
       content: res.message,
       icon: "success"
     });
-    console.log(res);
+    removeCartItems(checkoutItems.map(item => ({
+      productId: item.product.id,
+      skuId: item.sku.id
+    })))
+    setIsSubmitting(true)
+    setPaymentOrder(res.data)
+    openPaymentPopup()
   };
 
   useEffect(() => {
+    if(paymentOrder) {
+      setPaymentOrder(paymentOrder)
+      setIsSubmitting(true)
+    }
     getAddressDefault();
   }, []);
 
@@ -146,7 +186,12 @@ const OrderConfirm = () => {
       </div>
 
       {/* 支付弹框 */}
-      <PaymentPopup visible={visible} />
+      <PaymentPopup 
+        visible={visible} 
+        order={paymentOrder} 
+        handleClose={closePaymentPopup}
+        success={paymentSuccess}
+      />
     </>
   );
 };

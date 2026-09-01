@@ -60,7 +60,7 @@ const Category = () => {
         <div className={styles["content"]}>
           <div className={styles["grid"]}>
             {children.map((item) => (
-              <div className={styles["grid-item"]} key={item.id}>
+              <div className={styles["grid-item"]} key={item.id} onClick={() => navigate(`/product/list?categoryId=${item.id}`)}>
                 <img src={item.icon} className={styles["grid-cover"]} />
                 <div className="grid-name">{item.name}</div>
               </div>

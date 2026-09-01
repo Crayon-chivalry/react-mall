@@ -11,6 +11,7 @@ import ProductCard from "@/components/ProductCard";
 const ProductList = () => {
   const [searchParams] = useSearchParams();
   const keyword = searchParams.get("keyword");
+  const categoryId = searchParams.get("categoryId");
   const [list, setList] = useState<ProductItem[]>([]);
 
   // 获取商品列表
@@ -19,6 +20,7 @@ const ProductList = () => {
       page: 1,
       pageSize: 100,
       keyword: keyword,
+      ...(categoryId? { categoryId: categoryId } : {}),
     });
     setList(res.data.list);
     console.log(res);

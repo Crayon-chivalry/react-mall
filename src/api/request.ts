@@ -50,12 +50,11 @@ request.interceptors.response.use(
   (error) => {
     // 失败时也要确保全局 loading 被清除，避免页面残留提示
     Toast.clear();
-
-    // if (error.response?.status === 401) {
-    //   // token 过期，跳转登录
-    //   localStorage.removeItem('token');
-    //   window.location.href = '/login';
-    // }
+    if (error.response?.status === 401) {
+      // token 过期，跳转登录
+      useUserStore.getState().signOut()
+      window.location.replace('/login')
+    }
     const content =
       error?.response?.data?.message || error?.message || String(error);
     Toast.show({

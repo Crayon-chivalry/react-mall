@@ -4,7 +4,7 @@ import Layout from "@/pages/Layout";
 import Home from "@/pages/Home";
 import Category from "@/pages/Category";
 import Cart from "@/pages/Cart";
-import User from "@/pages/User";
+import User from "@/pages/User/Profile";
 import Login from "@/pages/Auth/Login";
 import Register from "@/pages/Auth/Register";
 import ResetPassword from "@/pages/Auth/ResetPassword";
@@ -12,9 +12,11 @@ import Address from "@/pages/Address/List";
 import AddressForm from "@/pages/Address/Form";
 import Product from "@/pages/Product/Detail";
 import ProductList from "@/pages/Product/List";
-import Search from "@/pages/Search"
+import Search from "@/pages/Search";
 import OrderConfirm from "@/pages/Order/Confirm";
-import OrderList from "@/pages/Order/List"
+import OrderList from "@/pages/Order/List";
+import Notice from "@/pages/Notice";
+import Settings from "@/pages/User/Settings";
 
 const router = createBrowserRouter([
   {
@@ -73,26 +75,34 @@ const router = createBrowserRouter([
       },
       {
         path: "list",
-        element: <ProductList />
-      }
-    ]
+        element: <ProductList />,
+      },
+    ],
   },
   {
     path: "/order",
     children: [
       {
         path: "confirm",
-        element: <OrderConfirm />
+        element: <OrderConfirm />,
       },
       {
         path: "list",
-        element: <OrderList />
-      }
-    ]
+        element: <OrderList />,
+      },
+    ],
   },
   {
     path: "/search",
     element: <Search />,
+  },
+  {
+    path: "/notice",
+    element: <Notice />,
+  },
+  {
+    path: "settings",
+    element: <Settings />,
   },
 ]);
 
