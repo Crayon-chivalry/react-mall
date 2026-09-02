@@ -7,6 +7,7 @@ export const contentApi = {
     return request.get<ApiResponse>("/banners")
   },
 
+  // 金刚区
   homeEntries: () => {
     return request.get<ApiResponse>("/home-entries")
   }

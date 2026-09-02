@@ -5,25 +5,25 @@ import { Stepper, Checkbox, SwipeAction, ErrorBlock } from "antd-mobile";
 import AppNavBar from "@/components/AppNavBar";
 import styles from "./inedx.module.scss";
 import { formatSpecsLabel } from "@/utils";
-import useProductStore from "@/store/productStore";
+import useCartStore from "@/store/cartStore";
 
 const Cart = () => {
   const navigate = useNavigate();
 
-  const setCartItemChecked = useProductStore(
+  const setCartItemChecked = useCartStore(
     (state) => state.setCartItemChecked,
   );
-  const setAllCartItemsChecked = useProductStore(
+  const setAllCartItemsChecked = useCartStore(
     (state) => state.setAllCartItemsChecked,
   );
-  const updateCartItemQuantity = useProductStore(
+  const updateCartItemQuantity = useCartStore(
     (state) => state.updateCartItemQuantity,
   );
-  const removeCartItem = useProductStore((state) => state.removeCartItem);
-  const removeCartItems = useProductStore((state) => state.removeCartItems);
-  const setCheckoutItems = useProductStore((state) => state.setCheckoutItems);
+  const removeCartItem = useCartStore((state) => state.removeCartItem);
+  const removeCartItems = useCartStore((state) => state.removeCartItems);
+  const setCheckoutItems = useCartStore((state) => state.setCheckoutItems);
 
-  const cartList = useProductStore((state) => state.cartList);
+  const cartList = useCartStore((state) => state.cartList);
   const allChecked =
     cartList.length > 0 && cartList.every((item) => item.checked);
   const [isEdit, setIsEdit] = useState(false);

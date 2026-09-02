@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-import type { ProductItem, SkuItem, OrderItem } from "@/api/types";
+import type { ProductItem, SkuItem } from "@/api/types";
 
 export interface CartItem {
   product: ProductItem;
@@ -10,15 +10,9 @@ export interface CartItem {
   checked: boolean;
 }
 
-interface ProductInterface {
+interface CartStore {
   cartList: CartItem[];
   checkoutItems: CartItem[];
-  // 当前待支付订单，用于支付弹框显示和支付操作，避免刷新页面丢失
-  paymentOrder: OrderItem | null;
-  /** 设置当前待支付订单，支付弹框会根据它恢复显示 */
-  setPaymentOrder: (order: OrderItem | null) => void;
-  /** 清空当前待支付订单，支付成功/取消后调用 */
-  clearPaymentOrder: () => void;
   /** 添加购物车项；相同商品和 SKU 会累加数量 */
   addCartItem: (product: ProductItem, sku: SkuItem, quantity?: number) => void;
   /** 设置待确认订单的商品 */
@@ -35,15 +29,11 @@ interface ProductInterface {
   setAllCartItemsChecked: (checked: boolean) => void;
   /** 更新指定购物车项的数量，数量会限制在库存范围内 */
   updateCartItemQuantity: (productId: number, skuId: number, quantity: number) => void;
-
 }
 
-const useProductStore = create<ProductInterface>()(persist((set) => ({
+const useCartStore = create<CartStore>()(persist((set) => ({
   cartList: [],
   checkoutItems: [],
-  paymentOrder: null,
-  setPaymentOrder: (order) => set({ paymentOrder: order }),
-  clearPaymentOrder: () => set({ paymentOrder: null }),
   addCartItem: (product, sku, quantity = 1) => {
     set((state) => {
       const existingItem = state.cartList.find(
@@ -122,15 +112,13 @@ const useProductStore = create<ProductInterface>()(persist((set) => ({
         )
         .filter((item) => item.quantity > 0),
     }));
-  }
+  },
 }), {
   name: "mall-cart",
-  // 只持久化购物车和待支付订单数据，避免将 store 方法写入存储层
   partialize: (state) => ({
     cartList: state.cartList,
     checkoutItems: state.checkoutItems,
-    paymentOrder: state.paymentOrder,
   }),
 }));
 
-export default useProductStore;
+export default useCartStore;

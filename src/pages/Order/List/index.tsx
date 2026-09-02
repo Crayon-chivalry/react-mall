@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
-import { Tabs, Button, Dialog, ErrorBlock } from "antd-mobile";
+import { useSearchParams, useNavigate } from "react-router-dom";
+import { Tabs, InfiniteScroll, Dialog, ErrorBlock } from "antd-mobile";
 
 import type { OrderItem, OrderStatus } from "@/api/types";
 import { shopApi } from "@/api/shopApi";
@@ -30,39 +30,47 @@ const statusNames: Record<OrderStatus, string> = {
 };
 
 const OrderList = () => {
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const paramsStatus = searchParams.get("status");
   const [status, setStatus] = useState<OrderTabStatus>(
-    isValidTabStatus(paramsStatus) ? paramsStatus : "all"
+    isValidTabStatus(paramsStatus) ? paramsStatus : "all",
   );
   const [list, setList] = useState<OrderItem[]>([]);
   const [visible, setVisible] = useState<boolean>(false);
   const [activeOrder, setActiveOrder] = useState<OrderItem | null>(null);
 
   // 关闭付款弹框
-  const closePaymentPopup = () => setVisible(false)
+  const closePaymentPopup = () => setVisible(false);
 
   // tabs 变化
   const onChange = (key: string) => {
-    console.log(key)
+    console.log(key);
     setStatus(key as OrderTabStatus);
   };
 
   // 点击去付款按钮, 显示付款弹框
-  const paymentClick = (item: OrderItem) => {
+  const paymentClick = (e: React.MouseEvent, item: OrderItem) => {
+    e.stopPropagation();
     setActiveOrder(item);
     setVisible(true);
   };
 
+
+  const loadMore = async () => {
+    await console.log("加载更多");
+  }
+
   // 取消订单
-  const cancelOrder = () => {
+  const cancelOrder = (e: React.MouseEvent) => {
+    e.stopPropagation();
     Dialog.confirm({
       content: "确定要取消订单吗？",
       onConfirm: () => {
-        console.log("确定取消")
-      }
-    })
-  }
+        console.log("确定取消");
+      },
+    });
+  };
 
   // 获取订单列表
   const getOrderList = async () => {
@@ -83,19 +91,21 @@ const OrderList = () => {
     <>
       <AppNavBar title="我的订单" />
 
-      <Tabs
-        activeKey={status}
-        className={styles["tabs"]}
-        onChange={onChange}
-      >
+      {/* 标签栏 */}
+      <Tabs activeKey={status} className={styles["tabs"]} onChange={onChange}>
         {statusList.map((item) => (
           <Tabs.Tab title={item.name} key={item.value}></Tabs.Tab>
         ))}
       </Tabs>
 
+      {/* 列表 */}
       <div className={styles["order-list"]}>
         {list.map((item) => (
-          <div className={styles["order-item"]} key={item.id}>
+          <div
+            className={styles["order-item"]}
+            key={item.id}
+            onClick={() => navigate(`/order/detail?id=${item.id}`)}
+          >
             <div className={styles["order-header"]}>
               <div className={styles["order-no"]}>订单号：{item.orderNo}</div>
               <div className={styles["order-status"]}>
@@ -132,28 +142,31 @@ const OrderList = () => {
 
               {item.status === "pending" && (
                 <div className={styles["btn-wrap"]}>
-                  <Button size="small" shape="rounded" onClick={cancelOrder}>
+                  <div className={styles["gray-button"]} onClick={cancelOrder}>
                     取消订单
-                  </Button>
-                  <Button
-                    color="primary"
-                    size="small"
-                    shape="rounded"
-                    onClick={() => paymentClick(item)}
+                  </div>
+                  <div
+                    className={styles["button"]}
+                    onClick={(e) => paymentClick(e, item)}
                   >
                     去付款
-                  </Button>
+                  </div>
                 </div>
               )}
             </div>
           </div>
         ))}
       </div>
+      <InfiniteScroll loadMore={loadMore} hasMore={true} />
 
-      {list.length === 0 && <ErrorBlock status='empty' />}
+      {list.length === 0 && <ErrorBlock status="empty" />}
 
       {/* 支付弹框 */}
-      <PaymentPopup visible={visible} order={activeOrder} handleClose={closePaymentPopup} />
+      <PaymentPopup
+        visible={visible}
+        order={activeOrder}
+        handleClose={closePaymentPopup}
+      />
     </>
   );
 };

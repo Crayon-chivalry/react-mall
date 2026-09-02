@@ -9,7 +9,7 @@ import styles from "./index.module.scss";
 import AppNavBar from "@/components/AppNavBar";
 import ActionBar from "../components/ActionBar"
 import SkuPopup, { type SkuPopupMode } from "../components/SkuPopup"
-import useProductStore from "@/store/productStore";
+import useCartStore from "@/store/cartStore";
 
 const Product = () => {
   const navigate = useNavigate()
@@ -21,9 +21,9 @@ const Product = () => {
   // 规格弹窗
   const [skuVisible, setSkuVisible] = useState<boolean>(false);
   const [skuMode, setSkuMode] = useState<SkuPopupMode>("cart");
-  const addCartItem = useProductStore((state) => state.addCartItem);
+  const addCartItem = useCartStore((state) => state.addCartItem);
 
-  const setCheckoutItems = useProductStore((state) => state.setCheckoutItems);
+  const setCheckoutItems = useCartStore((state) => state.setCheckoutItems);
 
   // 打开规格弹窗（cart=加入购物车 buy=立即购买）
   const openSkuPopup = (mode: SkuPopupMode) => {

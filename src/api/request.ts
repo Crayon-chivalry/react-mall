@@ -53,7 +53,9 @@ request.interceptors.response.use(
     if (error.response?.status === 401) {
       // token 过期，跳转登录
       useUserStore.getState().signOut()
-      window.location.replace('/login')
+      setTimeout(() => {
+        window.location.href = '/login'
+      }, 1000)
     }
     const content =
       error?.response?.data?.message || error?.message || String(error);

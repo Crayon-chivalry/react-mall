@@ -17,6 +17,7 @@ import OrderConfirm from "@/pages/Order/Confirm";
 import OrderList from "@/pages/Order/List";
 import Notice from "@/pages/Notice";
 import Settings from "@/pages/User/Settings";
+import OrderDetail from "@/pages/Order/Detail"
 
 const router = createBrowserRouter([
   {
@@ -89,6 +90,10 @@ const router = createBrowserRouter([
       {
         path: "list",
         element: <OrderList />,
+      },
+      {
+        path: "detail",
+        element: <OrderDetail />,
       },
     ],
   },

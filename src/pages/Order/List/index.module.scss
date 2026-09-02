@@ -92,5 +92,18 @@
     justify-content: flex-end;
     gap: $space-3;
     margin-top: $space-3;
+
+    .button {
+      padding: $space-2 $space-3;
+      background-color: $color-primary;
+      color: #fff;
+      border-radius: $radius-2;
+    }
+
+    .gray-button {
+      @extend .button;
+      background-color: #ebedf2;
+      color: $color-text-secondary;
+    }
   }
 }

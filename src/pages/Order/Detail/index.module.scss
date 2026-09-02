@@ -1,0 +1,153 @@
+.order-detail {
+  @include flex-column($space-2);
+  padding-bottom: 46px; // 底部操作栏高度
+}
+
+.address {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+  padding: $space-4 $space-3;
+  background-color: #fff;
+
+  .address-icon {
+    font-size: 18px;
+  }
+
+  .address-detail {
+    display: flex;
+    align-items: center;
+    gap: $space-1;
+  }
+
+  .address-label {
+    margin-top: $space-2;
+    color: $color-text-secondary;
+    font-size: 12px;
+  }
+
+  ::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: repeating-linear-gradient(
+      -45deg,
+      #ff976a 0,
+      #ff976a 20%,
+      transparent 0,
+      transparent 25%,
+      #1989fa 0,
+      #1989fa 45%,
+      transparent 0,
+      transparent 50%
+    );
+    background-size: 80px;
+  }
+}
+
+.order-goods {
+  padding: $space-3;
+  @include flex-column($space-1);
+  background-color: #fff;
+
+  .goods-item {
+    display: flex;
+    gap: $space-3;
+
+    .goods-content {
+      display: flex;
+      flex: 1;
+      min-width: 0;
+      gap: $space-3;
+    }
+
+    .goods-cover {
+      display: block;
+      flex: 0 0 60px;
+      width: 60px;
+      height: 60px;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+
+    .goods-content > div:not(.goods-cover) {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .goods-name {
+      @include text-hidden(2);
+    }
+
+    .goods-label {
+      margin-top: $space-2;
+      color: $color-text-secondary;
+      font-size: 12px;
+    }
+
+    .goods-right {
+      flex: 0 0 auto;
+      text-align: right;
+    }
+  }
+
+  .order-total {
+    text-align: right;
+
+    strong {
+      font-size: 16px;
+      color: $color-primary;
+    }
+  }
+}
+
+.order-info {
+  padding: $space-3;
+  @include flex-column($space-4);
+  background-color: #fff;
+
+  .info-item {
+    display: flex;
+    justify-content: space-between;
+
+    span:first-child {
+      color: $color-text-secondary;
+    }
+  }
+}
+
+.action-bar {
+  padding: 0 $space-3;
+  height: 46px;
+  position: fixed;
+  inset: auto 0 0;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: $space-3;
+  border-top: 1px solid $color-border;
+  font-size: 14px;
+  box-sizing: border-box;
+
+  .button {
+    padding: $space-2 $space-3;
+    background-color: $color-primary;
+    color: #fff;
+    border-radius: $radius-2;
+  }
+
+  .gray-button {
+    @extend .button;
+    background-color: #EBEDF2;
+    color: $color-text-secondary;
+  }
+}

@@ -4,9 +4,10 @@ import { Tag, Input, Toast } from "antd-mobile";
 import { RightOutline } from "antd-mobile-icons";
 
 import { addressApi } from "@/api/addressApi";
-import type { AddressItem, OrderItem } from "@/api/types";
+import type { AddressItem } from "@/api/types";
 import { shopApi } from "@/api/shopApi";
-import useProductStore from "@/store/productStore";
+import useCartStore from "@/store/cartStore";
+import useOrderStore from "@/store/orderStore";
 import { formatSpecsLabel } from "@/utils";
 import styles from "./index.module.scss";
 import AppNavBar from "@/components/AppNavBar";
@@ -18,13 +19,12 @@ const OrderConfirm = () => {
   const [remark, setRemark] = useState<string>("")
   const [visible, setVisible] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState(false)
-  // const [paymentOrder, setPaymentOrder] = useState<OrderItem | null>(null)
 
-  const paymentOrder = useProductStore((state) => state.paymentOrder);
-  const setPaymentOrder = useProductStore((state) => state.setPaymentOrder);
-  const clearPaymentOrder = useProductStore((state) => state.clearPaymentOrder);
-  const checkoutItems = useProductStore((state) => state.checkoutItems);
-  const removeCartItems = useProductStore((state) => state.removeCartItems)
+  const paymentOrder = useOrderStore((state) => state.paymentOrder);
+  const setPaymentOrder = useOrderStore((state) => state.setPaymentOrder);
+  const clearPaymentOrder = useOrderStore((state) => state.clearPaymentOrder);
+  const checkoutItems = useCartStore((state) => state.checkoutItems);
+  const removeCartItems = useCartStore((state) => state.removeCartItems)
 
   // 总计
   const totalAmount = checkoutItems.reduce(

@@ -33,6 +33,10 @@ export const shopApi = {
     return request.get<ApiResponse>("/orders", {params});
   },
 
+  orderDetail: (id: number) => {
+    return request.get<ApiResponse>(`/orders/${id}`);
+  },
+
   // 订单支付
   orderPayment: (id: number, type: string) => {
     return request.post<ApiResponse>(`/orders/${id}/pay`, { paymentType: type });
