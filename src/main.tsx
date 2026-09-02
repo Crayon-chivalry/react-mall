@@ -1,14 +1,13 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
 
-import { RouterProvider } from 'react-router-dom'
-import router from './router'
+import App from "./App";
 
-import 'normalize.css'
-import '@/styles/base.scss'
+import "normalize.css";
+import "@/styles/base.scss";
 
-createRoot(document.getElementById('root')!).render(
+createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <App />
   </StrictMode>,
-)
+);

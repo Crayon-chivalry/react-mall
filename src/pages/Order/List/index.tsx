@@ -5,6 +5,7 @@ import { Tabs, InfiniteScroll, Dialog, ErrorBlock } from "antd-mobile";
 import type { OrderItem, OrderStatus } from "@/api/types";
 import { shopApi } from "@/api/shopApi";
 import { formatSpecsLabel } from "@/utils/index";
+import usePagination from "@/hooks/usePagination";
 import styles from "./index.module.scss";
 import AppNavBar from "@/components/AppNavBar";
 import PaymentPopup from "../components/PaymentPopup";
@@ -36,16 +37,31 @@ const OrderList = () => {
   const [status, setStatus] = useState<OrderTabStatus>(
     isValidTabStatus(paramsStatus) ? paramsStatus : "all",
   );
-  const [list, setList] = useState<OrderItem[]>([]);
   const [visible, setVisible] = useState<boolean>(false);
   const [activeOrder, setActiveOrder] = useState<OrderItem | null>(null);
+
+  const { list, hasMore, refresh, loadMore } = usePagination<OrderItem>({
+    fetcher: async (page, pageSize) => {
+      const { data: res } = await shopApi.orderList({
+        page,
+        pageSize,
+        ...(status !== "all" ? { status } : {}),
+      });
+      console.log("res", res);
+      return {
+        list: res.data.list,
+        total: res.data.pagination.total,
+      };
+    },
+    pageSize: 10,
+    autoLoad: false,
+  });
 
   // 关闭付款弹框
   const closePaymentPopup = () => setVisible(false);
 
   // tabs 变化
   const onChange = (key: string) => {
-    console.log(key);
     setStatus(key as OrderTabStatus);
   };
 
@@ -56,10 +72,6 @@ const OrderList = () => {
     setVisible(true);
   };
 
-
-  const loadMore = async () => {
-    await console.log("加载更多");
-  }
 
   // 取消订单
   const cancelOrder = (e: React.MouseEvent) => {
@@ -72,19 +84,9 @@ const OrderList = () => {
     });
   };
 
-  // 获取订单列表
-  const getOrderList = async () => {
-    const { data: res } = await shopApi.orderList({
-      page: 1,
-      pageSize: 10,
-      ...(status !== "all" ? { status } : {}),
-    });
-    console.log(res);
-    setList(res.data.list);
-  };
-
   useEffect(() => {
-    getOrderList();
+    window.scrollTo(0, 0);
+    void refresh();
   }, [status]);
 
   return (
@@ -157,7 +159,7 @@ const OrderList = () => {
           </div>
         ))}
       </div>
-      <InfiniteScroll loadMore={loadMore} hasMore={true} />
+      <InfiniteScroll loadMore={loadMore} hasMore={hasMore} />
 
       {list.length === 0 && <ErrorBlock status="empty" />}
 

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 type PageResult<T> =
   | T[]
@@ -31,6 +31,23 @@ export const usePagination = <T>({
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [total, setTotal] = useState(0);
+  const [initialized, setInitialized] = useState(false);
+
+  const loadingRef = useRef(false);
+  const pageRef = useRef(initialPage);
+  const hasMoreRef = useRef(true);
+
+  useEffect(() => {
+    loadingRef.current = loading;
+  }, [loading]);
+
+  useEffect(() => {
+    pageRef.current = page;
+  }, [page]);
+
+  useEffect(() => {
+    hasMoreRef.current = hasMore;
+  }, [hasMore]);
 
   const resolveList = useCallback((result: PageResult<T>) => {
     if (Array.isArray(result)) {
@@ -51,18 +68,21 @@ export const usePagination = <T>({
 
   const fetchPage = useCallback(
     async (targetPage: number, append = false) => {
-      if (!enabled || loading) {
+      if (!enabled || loadingRef.current) {
         return;
       }
 
+      loadingRef.current = true;
       setLoading(true);
 
       try {
         const result = await fetcher(targetPage, pageSize);
         const { list: nextList, total: nextTotal } = resolveList(result);
 
-        setList((prev) => (append ? [...prev, ...nextList] : nextList));
+          setList((prev) => (append ? [...prev, ...nextList] : nextList));
+        setPage(targetPage);
         setTotal(nextTotal);
+        setInitialized(true);
 
         if (nextTotal > 0) {
           setHasMore(targetPage * pageSize < nextTotal);
@@ -70,45 +90,47 @@ export const usePagination = <T>({
           setHasMore(nextList.length === pageSize);
         }
       } finally {
+        loadingRef.current = false;
         setLoading(false);
       }
     },
-    [enabled, fetcher, loading, pageSize, resolveList],
+    [enabled, fetcher, pageSize, resolveList],
   );
 
   const goToPage = useCallback(
     async (targetPage: number) => {
-      setPage(targetPage);
       await fetchPage(targetPage, false);
     },
     [fetchPage],
   );
 
   const loadMore = useCallback(async () => {
-    if (!hasMore || loading) {
+    if (!initialized || !hasMoreRef.current || loadingRef.current) {
       return;
     }
 
-    const nextPage = page + 1;
-    setPage(nextPage);
+    const nextPage = pageRef.current + 1;
     await fetchPage(nextPage, true);
-  }, [fetchPage, hasMore, loading, page]);
+  }, [fetchPage, initialized]);
 
   const refresh = useCallback(async () => {
-    setPage(initialPage);
+    setInitialized(false);
     await fetchPage(initialPage, false);
   }, [fetchPage, initialPage]);
 
   const reset = useCallback(() => {
+    pageRef.current = initialPage;
     setPage(initialPage);
     setList([]);
     setTotal(0);
     setHasMore(true);
+    setInitialized(false);
+    hasMoreRef.current = true;
   }, [initialPage]);
 
   useEffect(() => {
     if (autoLoad && enabled) {
-      fetchPage(initialPage, false);
+      void fetchPage(initialPage, false);
     }
   }, [autoLoad, enabled, fetchPage, initialPage]);
 
@@ -118,6 +140,7 @@ export const usePagination = <T>({
     total,
     loading,
     hasMore,
+    initialized,
     setPage: goToPage,
     loadMore,
     refresh,
