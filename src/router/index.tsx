@@ -8,6 +8,7 @@ import User from "@/pages/User/Profile";
 import Login from "@/pages/Auth/Login";
 import Register from "@/pages/Auth/Register";
 import ResetPassword from "@/pages/Auth/ResetPassword";
+import UpdatePassword from "@/pages/Auth/UpdatePassword";
 import Address from "@/pages/Address/List";
 import AddressForm from "@/pages/Address/Form";
 import Product from "@/pages/Product/Detail";
@@ -17,7 +18,7 @@ import OrderConfirm from "@/pages/Order/Confirm";
 import OrderList from "@/pages/Order/List";
 import Notice from "@/pages/Notice";
 import Settings from "@/pages/User/Settings";
-import OrderDetail from "@/pages/Order/Detail"
+import OrderDetail from "@/pages/Order/Detail";
 
 const router = createBrowserRouter([
   {
@@ -43,16 +44,25 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: "/login",
-    element: <Login />,
-  },
-  {
-    path: "/register",
-    element: <Register />,
-  },
-  {
-    path: "/reset-password",
-    element: <ResetPassword />,
+    path: "/auth",
+    children: [
+      {
+        path: "login",
+        element: <Login />,
+      },
+      {
+        path: "register",
+        element: <Register />,
+      },
+      {
+        path: "reset-password",
+        element: <ResetPassword />,
+      },
+      {
+        path: "update-password",
+        element: <UpdatePassword />,
+      },
+    ],
   },
   {
     path: "/address",

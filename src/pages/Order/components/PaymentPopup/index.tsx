@@ -11,7 +11,7 @@ interface PaymentProps {
   visible: boolean
   order: OrderItem | null
   handleClose: () => void
-  success?: () => void
+  success?: (item?: OrderItem) => void
 }
 
 interface PaymentTypeInterface {
@@ -44,7 +44,7 @@ const PaymentPopup = ({visible, order, handleClose, success}: PaymentProps) => {
     });
     setTimeout(() => {
       handleClose()
-      success?.()
+      success?.(res.data)
     }, 1000)
   }
 

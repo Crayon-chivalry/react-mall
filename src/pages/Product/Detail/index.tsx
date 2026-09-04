@@ -83,7 +83,6 @@ const Product = () => {
     if (!goodsId) return;
     const { data: res } = await shopApi.goods(Number(goodsId));
     setPageData(res.data);
-    console.log(res.data);
   };
 
   useEffect(() => {

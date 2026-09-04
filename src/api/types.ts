@@ -26,6 +26,12 @@ export interface RegisterParams {
   nickname: string
 }
 
+// 密码
+export interface UpdatePasswordParams {
+  oldPassword: string
+  newPassword: string
+}
+
 // 轮播图
 export interface BannerItem {
   id: number
@@ -53,7 +59,9 @@ export interface CategoriesItem {
   children: CategoriesItem[]
 }
 
-// 商品
+/**
+ * 商品相关
+ */
 export interface SpecsItem {
   name: string
   value: string
@@ -104,7 +112,9 @@ export interface AddressItem {
   addressTag?: string
 }
 
-// 订单
+/**
+ * 订单
+ */
 
 // 订单创建提交的 items
 export interface OrderCreateProductItem {

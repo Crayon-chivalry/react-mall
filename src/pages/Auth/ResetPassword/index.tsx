@@ -27,7 +27,7 @@ const Register = () => {
             label="手机号"
             rules={rules.phone}
           >
-            <Input placeholder="请输入姓名" />
+            <Input placeholder="请输入手机号" />
           </Form.Item>
           <Form.Item
             name="code"

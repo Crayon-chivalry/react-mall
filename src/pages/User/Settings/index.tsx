@@ -1,11 +1,13 @@
 import { RightOutline } from 'antd-mobile-icons'
 import { Button, Space } from 'antd-mobile'
+import { useNavigate } from 'react-router-dom';
 
 import styles from "./index.module.scss";
 import useUserStore from "@/store/userStore";
 import AppNavBar from "@/components/AppNavBar";
 
 const Settings = () => {
+  const navigate = useNavigate()
   const { user } = useUserStore();
 
   return (
@@ -29,7 +31,7 @@ const Settings = () => {
               <RightOutline />
             </Space>
           </div>
-          <div className={styles["card-cell"]}>
+          <div className={styles["card-cell"]} onClick={() => navigate("/auth/update-password")}>
             <div>修改密码</div>
             <RightOutline />
           </div>

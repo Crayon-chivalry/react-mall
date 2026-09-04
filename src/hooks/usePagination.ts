@@ -128,6 +128,24 @@ export const usePagination = <T>({
     hasMoreRef.current = true;
   }, [initialPage]);
 
+  const updateItem = useCallback(
+    (
+      key: string | number,
+      getKey: (item: T) => string | number,
+      updater: (item: T) => T | null,
+    ) => {
+      setList((prev) =>
+        prev.flatMap((item) => {
+          if (getKey(item) !== key) return [item];
+
+          const nextItem = updater(item);
+          return nextItem ? [nextItem] : [];
+        }),
+      );
+    },
+    [],
+  );
+
   useEffect(() => {
     if (autoLoad && enabled) {
       void fetchPage(initialPage, false);
@@ -145,6 +163,7 @@ export const usePagination = <T>({
     loadMore,
     refresh,
     reset,
+    updateItem,
   };
 };
 

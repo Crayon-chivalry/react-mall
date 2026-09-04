@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Tag, Input, Toast } from "antd-mobile";
 import { RightOutline } from "antd-mobile-icons";
 
@@ -15,16 +15,20 @@ import PaymentPopup from "../components/PaymentPopup";
 
 const OrderConfirm = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const selectedAddress = location.state?.selectedAddress as
+    | AddressItem
+    | undefined;
   const [address, setAddress] = useState<AddressItem | null>(null);
-  const [remark, setRemark] = useState<string>("")
+  const [remark, setRemark] = useState<string>("");
   const [visible, setVisible] = useState<boolean>(false);
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const paymentOrder = useOrderStore((state) => state.paymentOrder);
   const setPaymentOrder = useOrderStore((state) => state.setPaymentOrder);
   const clearPaymentOrder = useOrderStore((state) => state.clearPaymentOrder);
   const checkoutItems = useCartStore((state) => state.checkoutItems);
-  const removeCartItems = useCartStore((state) => state.removeCartItems)
+  const removeCartItems = useCartStore((state) => state.removeCartItems);
 
   // 总计
   const totalAmount = checkoutItems.reduce(
@@ -34,17 +38,25 @@ const OrderConfirm = () => {
 
   // 打开支付弹框
   const openPaymentPopup = () => {
-    setVisible(true)
-  }
+    setVisible(true);
+  };
 
   // 关闭支付弹框
-  const closePaymentPopup = () => setVisible(false)
+  const closePaymentPopup = () => setVisible(false);
 
   // 支付成功
   const paymentSuccess = () => {
-    clearPaymentOrder()
-    navigate(-1)
-  }
+    clearPaymentOrder();
+    navigate(-1);
+  };
+
+  // 点击跳转地址列表
+  const handleSelectAddress = () => {
+    navigate("/address?mode=select", {
+      state: { from: "/order/confirm" },
+      replace: true,
+    });
+  };
 
   // 获取默认地址
   const getAddressDefault = async () => {
@@ -55,9 +67,9 @@ const OrderConfirm = () => {
   // 提交订单
   const submitOrder = async () => {
     // 如果订单已创建支付当前订单
-    if(isSubmitting) {
-      openPaymentPopup()
-      return
+    if (isSubmitting) {
+      openPaymentPopup();
+      return;
     }
 
     if (!address) {
@@ -77,23 +89,29 @@ const OrderConfirm = () => {
     });
     Toast.show({
       content: res.message,
-      icon: "success"
+      icon: "success",
     });
-    removeCartItems(checkoutItems.map(item => ({
-      productId: item.product.id,
-      skuId: item.sku.id
-    })))
-    setIsSubmitting(true)
-    setPaymentOrder(res.data)
-    openPaymentPopup()
+    removeCartItems(
+      checkoutItems.map((item) => ({
+        productId: item.product.id,
+        skuId: item.sku.id,
+      })),
+    );
+    setIsSubmitting(true);
+    setPaymentOrder(res.data);
+    openPaymentPopup();
   };
 
   useEffect(() => {
-    if(paymentOrder) {
-      setPaymentOrder(paymentOrder)
-      setIsSubmitting(true)
+    if (paymentOrder) {
+      setPaymentOrder(paymentOrder);
+      setIsSubmitting(true);
     }
-    getAddressDefault();
+    if (selectedAddress) {
+      setAddress(selectedAddress);
+    } else {
+      getAddressDefault();
+    }
   }, []);
 
   return (
@@ -101,8 +119,8 @@ const OrderConfirm = () => {
       <AppNavBar title="确认订单" />
 
       {/* 收货地址 */}
-      {address && (
-        <div className={styles["address"]}>
+      <div className={styles["address"]} onClick={handleSelectAddress}>
+        {address ? (
           <div>
             <div className={styles["address-detail"]}>
               <Tag color="primary" fill="outline">
@@ -114,9 +132,11 @@ const OrderConfirm = () => {
               {address.receiverName} {address.receiverPhone}
             </div>
           </div>
-          <RightOutline />
-        </div>
-      )}
+        ) : (
+          <div>请添加收货地址</div>
+        )}
+        <RightOutline />
+      </div>
 
       {/* 商品 */}
       <div className={styles["goods"]}>
@@ -153,7 +173,10 @@ const OrderConfirm = () => {
         <div>
           <div>买家留言</div>
           <div className={styles["input-wrap"]}>
-            <Input placeholder="给商家留言（选填）" onChange={val => setRemark(val)} />
+            <Input
+              placeholder="给商家留言（选填）"
+              onChange={(val) => setRemark(val)}
+            />
           </div>
         </div>
       </div>
@@ -186,9 +209,9 @@ const OrderConfirm = () => {
       </div>
 
       {/* 支付弹框 */}
-      <PaymentPopup 
-        visible={visible} 
-        order={paymentOrder} 
+      <PaymentPopup
+        visible={visible}
+        order={paymentOrder}
         handleClose={closePaymentPopup}
         success={paymentSuccess}
       />

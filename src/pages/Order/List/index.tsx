@@ -40,14 +40,13 @@ const OrderList = () => {
   const [visible, setVisible] = useState<boolean>(false);
   const [activeOrder, setActiveOrder] = useState<OrderItem | null>(null);
 
-  const { list, hasMore, refresh, loadMore } = usePagination<OrderItem>({
+  const { list, hasMore, refresh, loadMore, updateItem } = usePagination<OrderItem>({
     fetcher: async (page, pageSize) => {
       const { data: res } = await shopApi.orderList({
         page,
         pageSize,
         ...(status !== "all" ? { status } : {}),
       });
-      console.log("res", res);
       return {
         list: res.data.list,
         total: res.data.pagination.total,
@@ -63,6 +62,16 @@ const OrderList = () => {
   // tabs 变化
   const onChange = (key: string) => {
     setStatus(key as OrderTabStatus);
+  };
+
+  // 付款成功回调
+  const paymentSuccess = (newOrder?: OrderItem) => {
+    if (!newOrder) return;
+    updateItem(
+      newOrder.id,
+      (item) => item.id,
+      () => (status === "pending" ? null : newOrder),
+    );
   };
 
   // 点击去付款按钮, 显示付款弹框
@@ -168,6 +177,7 @@ const OrderList = () => {
         visible={visible}
         order={activeOrder}
         handleClose={closePaymentPopup}
+        success={paymentSuccess}
       />
     </>
   );

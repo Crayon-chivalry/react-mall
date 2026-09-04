@@ -54,7 +54,7 @@ request.interceptors.response.use(
       // token 过期，跳转登录
       useUserStore.getState().signOut()
       setTimeout(() => {
-        window.location.href = '/login'
+        window.location.href = '/auth/login'
       }, 1000)
     }
     const content =

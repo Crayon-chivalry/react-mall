@@ -122,7 +122,7 @@ const Register = () => {
       </Button>
 
       <div className={cn(styles["links"], styles["links-center"])}>
-        <div onClick={() => toPages("/login")}>已有账号？立即登录</div>
+        <div onClick={() => toPages("/auth/login")}>已有账号？立即登录</div>
       </div>
     </div>
   );
