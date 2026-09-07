@@ -69,7 +69,7 @@ const User = () => {
   return (
     <>
       <div className={styles["user"]}>
-        <img src="/src/assets/images/tx.png" className={styles["avatar"]} />
+        <img src={user?.avatar || "/src/assets/images/tx.png"} className={styles["avatar"]} />
         <div>
           <div className={styles["user-name"]}>{user?.nickname}</div>
           <div className={styles["user-phone"]}>{maskPhone(user?.phone)}</div>

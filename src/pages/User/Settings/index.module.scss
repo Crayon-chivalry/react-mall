@@ -34,3 +34,17 @@
   margin-top: $space-1;
   width: 100%;
 }
+
+.cover {
+  position: relative;
+
+  .cover-load {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 30px;
+    height: 30px;
+    overflow: hidden;
+    opacity: 0;
+  }
+}

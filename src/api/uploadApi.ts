@@ -10,6 +10,6 @@ export const uploadApi = {
     const formData = new FormData();
     formData.append("file", file);
 
-    return request.post<ApiResponse<UploadImageData>>("/uplods/images", formData);
+    return request.post<ApiResponse<UploadImageData>>("/uploads/images", formData);
   },
 };

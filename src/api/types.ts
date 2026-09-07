@@ -167,3 +167,14 @@ export interface OrderItem {
 export interface OrderListParams extends Pagination {
   status?: OrderStatus
 }
+
+/**
+ * 用户相关
+ */
+
+// 
+export interface UpdateProfileParams {
+  phone?: number
+  nickname?: string
+  avatar?: string
+}

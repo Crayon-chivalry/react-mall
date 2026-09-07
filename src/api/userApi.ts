@@ -1,5 +1,5 @@
 import request from "./request";
-import type { ApiResponse, RegisterParams, LoginParams, UpdatePasswordParams } from './types'
+import type { ApiResponse, RegisterParams, LoginParams, UpdatePasswordParams, UpdateProfileParams } from './types'
 
 export const userApi = {
   // 注册
@@ -15,5 +15,10 @@ export const userApi = {
   // 修改密码
   updatePassword: (params: UpdatePasswordParams) => {
     return request.post<ApiResponse>("/users/password", params)
-  }
+  },
+
+  // 修改资料
+  updateProfile: (params: UpdateProfileParams) => {
+    return request.patch<ApiResponse>("/users/profile", params)
+  },
 }

@@ -7,14 +7,15 @@ interface UserStateInterface {
   isLoggedIn: boolean;
   signIn: (token: string, user: UserDataInterface) => void;
   signOut: () => void;
-  updateUser: (userData: UserDataInterface) => void;
+  updateUser: (userData: Partial<UserDataInterface>) => void;
 }
 
-interface UserDataInterface {
+export interface UserDataInterface {
   userId: string;
   phone: string | number;
   id: number;
   nickname: string;
+  avatar?: string;
 }
 
 const useUserStore = create<UserStateInterface>()(
@@ -30,7 +31,7 @@ const useUserStore = create<UserStateInterface>()(
       // 清除登录信息
       signOut: () => set({ token: null, user: null, isLoggedIn: false }),
       // 更新用户信息
-      updateUser: (userData: UserDataInterface) =>
+      updateUser: (userData: Partial<UserDataInterface>) =>
         set((state: UserStateInterface) => ({
           user: state.user ? { ...state.user, ...userData } : null,
         })),
