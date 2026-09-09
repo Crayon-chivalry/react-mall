@@ -98,6 +98,15 @@ export interface ProductListParams extends Pagination {
   keyword?: string | null
 }
 
+/**
+ * 购物车
+ */
+export interface AddCartsParams {
+  productId: number
+  skuId: number
+  quantity: number
+}
+
 // 地址
 export interface AddressItem {
   id: number
@@ -174,7 +183,7 @@ export interface OrderListParams extends Pagination {
 
 // 
 export interface UpdateProfileParams {
-  phone?: number
+  phone?: number | string
   nickname?: string
   avatar?: string
 }

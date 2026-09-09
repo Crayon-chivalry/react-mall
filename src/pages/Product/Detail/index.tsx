@@ -32,7 +32,7 @@ const Product = () => {
   };
 
   // 规格弹窗确认回调
-  const handleSkuConfirm = (sku: SkuItem, quantity: number) => {
+  const handleSkuConfirm = async (sku: SkuItem, quantity: number) => {
     if (!pageData) {
       Toast.show({
         content: "商品信息还没加载完，请稍后再试",
@@ -41,12 +41,10 @@ const Product = () => {
       return;
     }
     if (skuMode === "cart") {
-      if (pageData) {
-        addCartItem(pageData, sku, quantity);
-        Toast.show({
-          content: "加入购物车成功",
-        });
-      }
+      await addCartItem(pageData, sku, quantity);
+      Toast.show({
+        content: "加入购物车成功",
+      });
     } else {
       setCheckoutItems([{
         product: pageData,

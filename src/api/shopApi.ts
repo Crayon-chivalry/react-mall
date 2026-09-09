@@ -5,6 +5,7 @@ import type {
   ProductListParams,
   OrderCreateParams,
   OrderListParams,
+  AddCartsParams
 } from "./types";
 
 export const shopApi = {
@@ -33,6 +34,7 @@ export const shopApi = {
     return request.get<ApiResponse>("/orders", {params});
   },
 
+  // 订单详情
   orderDetail: (id: number) => {
     return request.get<ApiResponse>(`/orders/${id}`);
   },
@@ -45,5 +47,25 @@ export const shopApi = {
   // 订单数徽标
   orderBadges: () => {
     return request.get<ApiResponse>("/orders/badges");
+  },
+
+  // 获取用户购物车
+  carts: () => {
+    return request.get<ApiResponse>("/carts")
+  },
+
+  // 加入购物车
+  addCarts: (params: AddCartsParams) => {
+    return request.post<ApiResponse>("/carts/items", params)
+  },
+
+  // 修改购物车数量
+  updateCartsQuantity: (itemId: number, quantity: number) => {
+    return request.patch<ApiResponse>(`/carts/items/${itemId}`, {quantity})
+  },
+
+  // 删除地址
+  removeCarts: (itemIds: number[]) => {
+    return request.delete<ApiResponse>("/carts/items", {data: {itemIds}})
   }
 };

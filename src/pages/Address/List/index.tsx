@@ -72,6 +72,12 @@ const Address = () => {
   const getAddress = async () => {
     const { data: res } = await addressApi.list();
     setAddressList(res.data);
+
+    if (mode !== "select") {
+      setSelectedAddressId(null);
+      return;
+    }
+
     setSelectedAddressId(
       res.data.find((item: AddressItem) => item.isDefault)?.id ?? null,
     );
@@ -89,7 +95,7 @@ const Address = () => {
         {addressList.map((item) => (
           <div
             className={`${styles["address-item"]} ${
-              selectedAddressId === item.id
+              mode === "select" && selectedAddressId === item.id
                 ? styles["address-item-selected"]
                 : ""
             }`}

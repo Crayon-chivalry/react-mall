@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Stepper, Checkbox, SwipeAction, ErrorBlock } from "antd-mobile";
 
@@ -10,6 +10,7 @@ import useCartStore from "@/store/cartStore";
 const Cart = () => {
   const navigate = useNavigate();
 
+  const fetchCartList = useCartStore((state) => state.fetchCartList);
   const setCartItemChecked = useCartStore(
     (state) => state.setCartItemChecked,
   );
@@ -27,6 +28,10 @@ const Cart = () => {
   const allChecked =
     cartList.length > 0 && cartList.every((item) => item.checked);
   const [isEdit, setIsEdit] = useState(false);
+
+  useEffect(() => {
+    fetchCartList();
+  }, [fetchCartList]);
 
   // 计算合计
   const totalAmount = useMemo(() => {

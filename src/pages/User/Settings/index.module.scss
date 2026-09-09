@@ -48,3 +48,17 @@
     opacity: 0;
   }
 }
+
+.dialog-content {
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+}
+
+.dialog-input {
+  margin-top: $space-3;
+  padding: $space-2 $space-3;
+  @include flex-between;
+  gap: $space-2;
+  background-color: rgb(246, 246, 246);
+}
