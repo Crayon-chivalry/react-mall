@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Swiper, Toast } from "antd-mobile";
+import { Swiper, Toast, InfiniteScroll } from "antd-mobile";
 import { ScanningOutline, BellOutline, SearchOutline } from "antd-mobile-icons";
 
 import ProductCard from "@/components/ProductCard";
@@ -8,14 +8,14 @@ import type { ProductItem, BannerItem } from "@/api/types";
 import styles from "./index.module.scss";
 import { contentApi } from "@/api/contentApi";
 import { shopApi } from "@/api/shopApi";
+import { navigateByLink } from "@/utils";
+import usePagination from "@/hooks/usePagination";
 import NavGrid from "./components/NavGrid";
 import PromoSections from "./components/PromoSections";
-import { navigateByLink } from "@/utils";
 
 const Home = () => {
   const navigate = useNavigate();
   const [banners, setBanners] = useState<BannerItem[]>([]);
-  const [goods, setGoods] = useState<ProductItem[]>([])
 
   const handleNavigate = (path: string) => {
     navigate(path);
@@ -26,23 +26,35 @@ const Home = () => {
     const { data: res } = await contentApi.banners();
     setBanners(res.data);
   };
-  
+
   // 获取商品列表
-  const getGoods = async () => {
-    const { data: res } = await shopApi.goodsList({ page: 1, pageSize: 100 })
-    setGoods(res.data.list)
-  }
+  const { list, hasMore, refresh, loadMore } = usePagination<ProductItem>({
+    fetcher: async (page, pageSize) => {
+      const { data: res } = await shopApi.goodsList({
+        page,
+        pageSize,
+      });
+      return {
+        list: res.data.list,
+        total: res.data.pagination.total,
+      };
+    },
+    pageSize: 10,
+    autoLoad: false,
+  });
 
   useEffect(() => {
-    getBanners()
-    getGoods()
+    getBanners();
+    void refresh();
   }, []);
 
   return (
     <>
       <div className={styles["header"]}>
         <div className={styles["header-row"]}>
-          <ScanningOutline onClick={() => Toast.show({content: "暂未开放"})} />
+          <ScanningOutline
+            onClick={() => Toast.show({ content: "暂未开放" })}
+          />
           <div
             className={styles["search"]}
             onClick={() => handleNavigate("/search")}
@@ -77,7 +89,9 @@ const Home = () => {
       {/* 活动专区 */}
       <PromoSections />
 
-      <ProductCard list={goods} />
+      {/* 商品 */}
+      <ProductCard list={list} />
+      <InfiniteScroll loadMore={loadMore} hasMore={hasMore} />
     </>
   );
 };
