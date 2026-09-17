@@ -187,3 +187,17 @@ export interface UpdateProfileParams {
   nickname?: string
   avatar?: string
 }
+
+export interface PromoImageItems {
+  id?: number
+  imageUrl: string
+  linkUrl: string
+  title: string
+}
+
+export interface PromoSectionsItem {
+  id: number
+  imageItems: PromoImageItems[]
+  layoutType: "single" | "double" | "triple"
+  title: string
+}

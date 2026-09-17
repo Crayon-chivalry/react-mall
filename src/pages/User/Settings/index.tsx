@@ -19,7 +19,7 @@ import Code from "@/components/Code";
 
 const Settings = () => {
   const navigate = useNavigate();
-  const { user, updateUser } = useUserStore();
+  const { user, updateUser, signOut } = useUserStore();
 
   // 上传头像
   const uploadSuccess = (items: ImageUploadItem[]) => {
@@ -81,6 +81,12 @@ const Settings = () => {
       },
     });
   };
+
+  // 退出登录
+  const logOut = () => {
+    signOut()
+    navigate("/auth/login", {replace: true})
+  }
 
   return (
     <>
@@ -145,7 +151,7 @@ const Settings = () => {
           </div>
         </div>
 
-        <Button color="primary" className={styles["logout-btn"]}>
+        <Button color="primary" className={styles["logout-btn"]} onClick={logOut}>
           退出登录
         </Button>
       </div>

@@ -37,29 +37,5 @@
 }
 
 .navigation {
-  margin-top: $space-4;
-}
-
-.banner {
   margin-top: $space-3;
-  width: 100%;
-}
-
-.banner-grid {
-  padding: $space-3 $space-3 $space-2;
-  display: flex;
-  gap: $space-2;
-
-  .banner-grid-img {
-    width: 100%;
-    display: block;
-  }
-
-  .banner-grid-item {
-    flex: 1;
-
-    &:nth-child(2) {
-      @include flex-column($space-2 0);
-    }
-  }
 }

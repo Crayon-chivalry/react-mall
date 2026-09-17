@@ -64,6 +64,22 @@ const SkuPopup = ({
   // 是否已选完所有规格
   const isComplete = specGroups.every((group) => selected[group.name]);
 
+  // 判断某规格值在当前其他维度的选择下是否存在对应 SKU
+  // 用法：isValueAvailable("存储容量", "512GB") => 512GB+当前已选外观 是否存在
+  const isValueAvailable = (name: string, value: string) => {
+    if (!goods) return false;
+    // 用待测值替换该维度，其余维度保持当前选择
+    const candidate = { ...selected, [name]: value };
+    return goods.skus.some((sku) =>
+      specGroups.every((group) =>
+        sku.specs.some(
+          (spec) =>
+            spec.name === group.name && spec.value === candidate[group.name]
+        )
+      )
+    );
+  };
+
   // 当前选中的 SKU（未选完时为 null，单规格商品取默认 SKU）
   const currentSku = useMemo(() => {
     if (!goods || !isComplete) return null;
@@ -137,17 +153,20 @@ const SkuPopup = ({
               <div key={group.name} className={styles.group}>
                 <div className={styles["group-name"]}>{group.name}</div>
                 <div className={styles.options}>
-                  {group.values.map((value) => (
-                    <div
-                      key={value}
-                      className={`${styles.option} ${
-                        selected[group.name] === value ? styles.active : ""
-                      }`}
-                      onClick={() => handleSelect(group.name, value)}
-                    >
-                      {value}
-                    </div>
-                  ))}
+                  {group.values.map((value) => {
+                    const available = isValueAvailable(group.name, value);
+                    return (
+                      <div
+                        key={value}
+                        className={`${styles.option} ${
+                          selected[group.name] === value ? styles.active : ""
+                        } ${!available ? styles.disabled : ""}`}
+                        onClick={() => available && handleSelect(group.name, value)}
+                      >
+                        {value}
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             ))}

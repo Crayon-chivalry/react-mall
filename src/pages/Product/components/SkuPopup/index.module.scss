@@ -85,6 +85,14 @@
         border-color: $color-primary;
         background-color: rgba(230, 30, 30, 0.05);
       }
+
+      // 组合不存在对应 SKU 时置灰不可点
+      &.disabled {
+        color: #C0C4CC;
+        background-color: #F7F8FA;
+        cursor: not-allowed;
+        opacity: 0.7;
+      }
     }
   }
 }

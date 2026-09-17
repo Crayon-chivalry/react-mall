@@ -32,7 +32,7 @@ const statusNames: Record<OrderStatus, string> = {
 
 const OrderList = () => {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const paramsStatus = searchParams.get("status");
   const [status, setStatus] = useState<OrderTabStatus>(
     isValidTabStatus(paramsStatus) ? paramsStatus : "all",
@@ -40,28 +40,31 @@ const OrderList = () => {
   const [visible, setVisible] = useState<boolean>(false);
   const [activeOrder, setActiveOrder] = useState<OrderItem | null>(null);
 
-  const { list, hasMore, refresh, loadMore, updateItem } = usePagination<OrderItem>({
-    fetcher: async (page, pageSize) => {
-      const { data: res } = await shopApi.orderList({
-        page,
-        pageSize,
-        ...(status !== "all" ? { status } : {}),
-      });
-      return {
-        list: res.data.list,
-        total: res.data.pagination.total,
-      };
-    },
-    pageSize: 10,
-    autoLoad: false,
-  });
+  const { list, hasMore, refresh, loadMore, updateItem } =
+    usePagination<OrderItem>({
+      fetcher: async (page, pageSize) => {
+        const { data: res } = await shopApi.orderList({
+          page,
+          pageSize,
+          ...(status !== "all" ? { status } : {}),
+        });
+        return {
+          list: res.data.list,
+          total: res.data.pagination.total,
+        };
+      },
+      pageSize: 10,
+      autoLoad: false,
+    });
 
   // 关闭付款弹框
   const closePaymentPopup = () => setVisible(false);
 
   // tabs 变化
   const onChange = (key: string) => {
-    setStatus(key as OrderTabStatus);
+    const nextStatus = key as OrderTabStatus;
+    setStatus(nextStatus);
+    setSearchParams({ status: nextStatus }, { replace: true });
   };
 
   // 付款成功回调
@@ -81,7 +84,6 @@ const OrderList = () => {
     setVisible(true);
   };
 
-
   // 取消订单
   const cancelOrder = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -94,7 +96,6 @@ const OrderList = () => {
   };
 
   useEffect(() => {
-    window.scrollTo(0, 0);
     void refresh();
   }, [status]);
 
@@ -115,7 +116,9 @@ const OrderList = () => {
           <div
             className={styles["order-item"]}
             key={item.id}
-            onClick={() => navigate(`/order/detail?id=${item.id}`)}
+            onClick={() =>
+              navigate(`/order/detail?id=${item.id}&status=${status}`)
+            }
           >
             <div className={styles["order-header"]}>
               <div className={styles["order-no"]}>订单号：{item.orderNo}</div>

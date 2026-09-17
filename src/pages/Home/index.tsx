@@ -4,16 +4,17 @@ import { Swiper, Toast } from "antd-mobile";
 import { ScanningOutline, BellOutline, SearchOutline } from "antd-mobile-icons";
 
 import ProductCard from "@/components/ProductCard";
-import type { ProductItem, BannerItem, EntriesItem } from "@/api/types";
+import type { ProductItem, BannerItem } from "@/api/types";
 import styles from "./index.module.scss";
 import { contentApi } from "@/api/contentApi";
 import { shopApi } from "@/api/shopApi";
-import HomeNavGrid from "./components/HomeNavGrid";
+import NavGrid from "./components/NavGrid";
+import PromoSections from "./components/PromoSections";
+import { navigateByLink } from "@/utils";
 
 const Home = () => {
   const navigate = useNavigate();
   const [banners, setBanners] = useState<BannerItem[]>([]);
-  const [entries, setEntries] = useState<EntriesItem[]>([]);
   const [goods, setGoods] = useState<ProductItem[]>([])
 
   const handleNavigate = (path: string) => {
@@ -25,13 +26,7 @@ const Home = () => {
     const { data: res } = await contentApi.banners();
     setBanners(res.data);
   };
-
-  // 获取金刚区
-  const getEntries = async () => {
-    const { data: res } = await contentApi.homeEntries();
-    setEntries(res.data);
-  };
-
+  
   // 获取商品列表
   const getGoods = async () => {
     const { data: res } = await shopApi.goodsList({ page: 1, pageSize: 100 })
@@ -39,8 +34,7 @@ const Home = () => {
   }
 
   useEffect(() => {
-    getBanners();
-    getEntries();
+    getBanners()
     getGoods()
   }, []);
 
@@ -63,7 +57,12 @@ const Home = () => {
           <Swiper autoplay loop indicatorProps={{ color: "white" }}>
             {banners.map((item) => (
               <Swiper.Item key={item.id}>
-                <img src={item.imageUrl} className={styles["swiper-image"]} />
+                <img
+                  src={item.imageUrl}
+                  className={styles["swiper-image"]}
+                  alt={item.title}
+                  onClick={() => navigateByLink(item.linkUrl, navigate)}
+                />
               </Swiper.Item>
             ))}
           </Swiper>
@@ -71,36 +70,12 @@ const Home = () => {
       </div>
 
       {/* 金刚区 */}
-      {entries.length > 0 && (
-        <div className={styles["navigation"]}>
-          <HomeNavGrid items={entries} pageSize={10} />
-        </div>
-      )}
+      <div className={styles["navigation"]}>
+        <NavGrid pageSize={10} />
+      </div>
 
       {/* 活动专区 */}
-      <img
-        src="/src/assets/images/home-banner.png"
-        className={styles["banner"]}
-      />
-
-      <div className={styles["banner-grid"]}>
-        <div className={styles["banner-grid-item"]}>
-          <img
-            src="/src/assets/images/banner-grid-left.png"
-            className={styles["banner-grid-img"]}
-          />
-        </div>
-        <div className={styles["banner-grid-item"]}>
-          <img
-            src="/src/assets/images/banner-grid-right1.png"
-            className={styles["banner-grid-img"]}
-          />
-          <img
-            src="/src/assets/images/banner-grid-right2.png"
-            className={styles["banner-grid-img"]}
-          />
-        </div>
-      </div>
+      <PromoSections />
 
       <ProductCard list={goods} />
     </>

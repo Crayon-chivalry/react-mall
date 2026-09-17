@@ -1,4 +1,20 @@
 import type { SpecsItem } from "@/api/types";
+import type { NavigateFunction } from "react-router-dom";
+
+// 根据链接类型跳转到站内或站外地址
+export const navigateByLink = (
+  linkUrl: string | null | undefined,
+  navigate: NavigateFunction,
+) => {
+  if (!linkUrl) return;
+
+  if (/^https?:\/\//.test(linkUrl)) {
+    window.open(linkUrl, "_blank", "noopener,noreferrer");
+    return;
+  }
+
+  navigate(linkUrl);
+};
 
 // 手机号脱敏
 export const maskPhone = (phone: string | number | null | undefined) => {

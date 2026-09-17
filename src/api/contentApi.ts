@@ -1,5 +1,5 @@
 import request from "./request";
-import type { ApiResponse } from './types'
+import type { ApiResponse, EntriesItem, PromoSectionsItem } from "./types";
 
 export const contentApi = {
   // 获取轮播图
@@ -9,7 +9,12 @@ export const contentApi = {
 
   // 金刚区
   homeEntries: () => {
-    return request.get<ApiResponse>("/home-entries")
-  }
-}
+    return request.get<ApiResponse<EntriesItem[]>>("/home-entries");
+  },
+
+  // 首页广告位
+  promoSections: () => {
+    return request.get<ApiResponse<PromoSectionsItem[]>>("/promo-sections");
+  },
+};
 

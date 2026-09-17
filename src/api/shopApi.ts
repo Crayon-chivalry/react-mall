@@ -64,7 +64,7 @@ export const shopApi = {
     return request.patch<ApiResponse>(`/carts/items/${itemId}`, {quantity})
   },
 
-  // 删除地址
+  // 删除购物车
   removeCarts: (itemIds: number[]) => {
     return request.delete<ApiResponse>("/carts/items", {data: {itemIds}})
   }
