@@ -103,16 +103,13 @@ const OrderConfirm = () => {
   };
 
   useEffect(() => {
-    if (paymentOrder) {
-      setPaymentOrder(paymentOrder);
-      setIsSubmitting(true);
-    }
+    setIsSubmitting(Boolean(paymentOrder));
     if (selectedAddress) {
       setAddress(selectedAddress);
     } else {
       getAddressDefault();
     }
-  }, []);
+  }, [paymentOrder, selectedAddress]);
 
   return (
     <>

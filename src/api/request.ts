@@ -54,9 +54,19 @@ request.interceptors.response.use(
     // 失败时也要确保全局 loading 被清除，避免页面残留提示
     Toast.clear();
     if (data?.code === 40101 || (status === 401 && !data?.code )) {
-      // token 过期，跳转登录
-      window.location.href = "/auth/login";
       useUserStore.getState().signOut();
+
+      // token 过期，记录当前页面，登录成功后返回
+      const currentPath =
+        window.location.pathname +
+        window.location.search +
+        window.location.hash;
+
+      if (window.location.pathname !== "/auth/login") {
+        window.location.href = `/auth/login?redirect=${encodeURIComponent(
+          currentPath,
+        )}`;
+      }
     } else {
       const content =
         error?.response?.data?.message || error?.message || String(error);

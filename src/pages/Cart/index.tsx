@@ -6,6 +6,7 @@ import AppNavBar from "@/components/AppNavBar";
 import styles from "./inedx.module.scss";
 import { formatSpecsLabel } from "@/utils";
 import useCartStore from "@/store/cartStore";
+import useOrderStore from "@/store/orderStore";
 
 const Cart = () => {
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ const Cart = () => {
   const removeCartItem = useCartStore((state) => state.removeCartItem);
   const removeCartItems = useCartStore((state) => state.removeCartItems);
   const setCheckoutItems = useCartStore((state) => state.setCheckoutItems);
+  const clearPaymentOrder = useOrderStore((state) => state.clearPaymentOrder);
 
   const cartList = useCartStore((state) => state.cartList);
   const allChecked =
@@ -61,8 +63,9 @@ const Cart = () => {
 
   // 结算
   const submit = () => {
-    setCheckoutItems(cartList.filter((item) => item.checked))
-    navigate("/order/confirm") 
+    setCheckoutItems(cartList.filter((item) => item.checked));
+    clearPaymentOrder();
+    navigate("/order/confirm");
   }
 
   return (

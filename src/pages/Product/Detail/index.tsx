@@ -10,6 +10,8 @@ import AppNavBar from "@/components/AppNavBar";
 import ActionBar from "../components/ActionBar"
 import SkuPopup, { type SkuPopupMode } from "../components/SkuPopup"
 import useCartStore from "@/store/cartStore";
+import useUserStore from "@/store/userStore";
+import useOrderStore from "@/store/orderStore";
 
 const Product = () => {
   const navigate = useNavigate()
@@ -18,12 +20,14 @@ const Product = () => {
   const [pageData, setPageData] = useState<ProductItem | null>(null);
   const [visible, setVisible] = useState<boolean>(false)
   const imageViewerRef = useRef<{ swipeTo: (index: number) => void } | null>(null)
+  const { isLoggedIn } = useUserStore()
   // 规格弹窗
   const [skuVisible, setSkuVisible] = useState<boolean>(false);
   const [skuMode, setSkuMode] = useState<SkuPopupMode>("cart");
   const addCartItem = useCartStore((state) => state.addCartItem);
 
   const setCheckoutItems = useCartStore((state) => state.setCheckoutItems);
+  const clearPaymentOrder = useOrderStore((state) => state.clearPaymentOrder);
 
   // 打开规格弹窗（cart=加入购物车 buy=立即购买）
   const openSkuPopup = (mode: SkuPopupMode) => {
@@ -33,6 +37,14 @@ const Product = () => {
 
   // 规格弹窗确认回调
   const handleSkuConfirm = async (sku: SkuItem, quantity: number) => {
+    if(!isLoggedIn) {
+      const currentPath =
+        window.location.pathname +
+        window.location.search +
+        window.location.hash;
+      navigate(`/auth/login?redirect=${encodeURIComponent(currentPath)}`);
+      return
+    }
     if (!pageData) {
       Toast.show({
         content: "商品信息还没加载完，请稍后再试",
@@ -51,7 +63,8 @@ const Product = () => {
         sku,
         quantity,
         checked: true
-      }])
+      }]);
+      clearPaymentOrder();
       navigate("/order/confirm")
     }
     setSkuVisible(false);

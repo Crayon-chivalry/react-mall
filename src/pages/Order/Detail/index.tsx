@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Toast, Dialog } from "antd-mobile";
 import { EnvironmentOutline } from "antd-mobile-icons";
 
@@ -20,9 +20,11 @@ const OrderStatusNames: Record<string, string> = {
   paid: "待发货",
   shipped: "待收货",
   completed: "已完成",
+  cancelled: "已取消",
 };
 
 const OrderDetail = () => {
+  const navigate = useNavigate()
   const [searchParams] = useSearchParams();
   const orderId = searchParams.get("id");
   const [order, setOrder] = useState<OrderItem | null>(null);
@@ -35,8 +37,48 @@ const OrderDetail = () => {
   const cancelOrder = () => {
     Dialog.confirm({
       content: "确定要取消订单吗？",
-      onConfirm: () => {
-        console.log("确定取消");
+      onConfirm: async () => {
+        if (!orderId) return;
+        const { data: res } = await shopApi.cancelOrder(Number(orderId));
+        Toast.show({
+          content: res.message,
+          icon: "success",
+        });
+        await getOrderDetail();
+      },
+    });
+  };
+
+  // 确认收货
+  const confirmTake = () => {
+    Dialog.confirm({
+      content: "确定要收货吗？",
+      onConfirm: async () => {
+        if (!orderId) return;
+        const { data: res } = await shopApi.confirmOrder(Number(orderId));
+        Toast.show({
+          content: res.message,
+          icon: "success",
+        });
+        await getOrderDetail();
+      },
+    });
+  };
+
+  // 删除订单
+  const deleteOrder = () => {
+    Dialog.confirm({
+      content: "确定要删除订单吗？",
+      onConfirm: async () => {
+        if (!orderId) return;
+        const { data: res } = await shopApi.deleteOrder(Number(orderId));
+        Toast.show({
+          content: res.message,
+          icon: "success",
+        });
+        setTimeout(() => {
+          navigate(-1)
+        }, 500)
       },
     });
   };
@@ -152,6 +194,16 @@ const OrderDetail = () => {
                   去付款
                 </div>
               </>
+            )}
+            {order.status === "shipped" && (
+              <div className={styles["button"]} onClick={confirmTake}>
+                确认收货
+              </div>
+            )}
+            {order.status === "cancelled" && (
+              <div className={styles["button"]} onClick={deleteOrder}>
+                删除订单
+              </div>
             )}
           </div>
 

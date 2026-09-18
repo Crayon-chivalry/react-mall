@@ -44,6 +44,21 @@ export const shopApi = {
     return request.post<ApiResponse>(`/orders/${id}/pay`, { paymentType: type });
   },
 
+  // 取消订单
+  cancelOrder: (id: number) => {
+    return request.post<ApiResponse>(`/orders/${id}/cancel`)
+  },
+
+  // 删除订单
+  deleteOrder: (id: number) => {
+    return request.delete<ApiResponse>(`/orders/${id}`)
+  },
+
+  // 收货
+  confirmOrder: (id: number) => {
+    return request.post<ApiResponse>(`/orders/${id}/confirm`)
+  },
+
   // 订单数徽标
   orderBadges: () => {
     return request.get<ApiResponse>("/orders/badges");

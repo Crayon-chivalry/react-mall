@@ -152,7 +152,7 @@ export interface OrderProductItem {
   skuSpecs: SpecsItem[]
 }
 
-export type OrderStatus = "pending" | "paid" | "shipped" | "completed"
+export type OrderStatus = "pending" | "paid" | "shipped" | "completed" | "cancelled"
 
 export interface OrderItem {
   id: number

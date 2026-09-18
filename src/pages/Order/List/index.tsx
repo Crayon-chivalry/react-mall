@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { Tabs, InfiniteScroll, Dialog, ErrorBlock } from "antd-mobile";
+import { Tabs, InfiniteScroll, Dialog, ErrorBlock, Toast } from "antd-mobile";
 
 import type { OrderItem, OrderStatus } from "@/api/types";
 import { shopApi } from "@/api/shopApi";
@@ -18,6 +18,7 @@ const statusList = [
   { name: "待发货", value: "paid" },
   { name: "待收货", value: "shipped" },
   { name: "已完成", value: "completed" },
+  { name: "已取消", value: "cancelled" },
 ] satisfies { name: string; value: OrderTabStatus }[];
 
 const isValidTabStatus = (value: string | null): value is OrderTabStatus =>
@@ -28,6 +29,7 @@ const statusNames: Record<OrderStatus, string> = {
   paid: "待发货",
   shipped: "待收货",
   completed: "已完成",
+  cancelled: "已取消",
 };
 
 const OrderList = () => {
@@ -85,15 +87,60 @@ const OrderList = () => {
   };
 
   // 取消订单
-  const cancelOrder = (e: React.MouseEvent) => {
+  const cancelOrder = (e: React.MouseEvent, id: number) => {
     e.stopPropagation();
     Dialog.confirm({
       content: "确定要取消订单吗？",
-      onConfirm: () => {
-        console.log("确定取消");
+      onConfirm: async () => {
+        const { data: res } = await shopApi.cancelOrder(id);
+        Toast.show({
+          content: res.message,
+          icon: "success",
+        });
+        updateItem(
+          id,
+          (item) => item.id,
+          (item) => (status === "pending" ? null : { ...item, status: "cancelled" }),
+        );
       },
     });
   };
+
+  // 确认收货
+  const confirmTake = (e: React.MouseEvent, id: number) => {
+    e.stopPropagation();
+    Dialog.confirm({
+      content: "确定要收货吗？",
+      onConfirm: async () => {
+        const { data: res } = await shopApi.confirmOrder(id);
+        Toast.show({
+          content: res.message,
+          icon: "success",
+        });
+        updateItem(
+          id,
+          (item) => item.id,
+          (item) => (status === "shipped" ? null : { ...item, status: "completed" }),
+        );
+      },
+    });
+  };
+
+  // 删除订单
+  const deleteOrder = (e: React.MouseEvent, id: number) => {
+    e.stopPropagation();
+    Dialog.confirm({
+      content: "确定要删除订单吗？",
+      onConfirm: async () => {
+        const { data: res } = await shopApi.deleteOrder(id);
+        Toast.show({
+          content: res.message,
+          icon: "success",
+        });
+        updateItem(id, (item) => item.id, () => null);
+      },
+    });
+  }
 
   useEffect(() => {
     void refresh();
@@ -156,7 +203,10 @@ const OrderList = () => {
 
               {item.status === "pending" && (
                 <div className={styles["btn-wrap"]}>
-                  <div className={styles["gray-button"]} onClick={cancelOrder}>
+                  <div
+                    className={styles["gray-button"]}
+                    onClick={(e) => cancelOrder(e, item.id)}
+                  >
                     取消订单
                   </div>
                   <div
@@ -164,6 +214,26 @@ const OrderList = () => {
                     onClick={(e) => paymentClick(e, item)}
                   >
                     去付款
+                  </div>
+                </div>
+              )}
+              {item.status === "shipped" && (
+                <div className={styles["btn-wrap"]}>
+                  <div
+                    className={styles["button"]}
+                    onClick={(e) => confirmTake(e, item.id)}
+                  >
+                    确认收货
+                  </div>
+                </div>
+              )}
+              {item.status === "cancelled" && (
+                <div className={styles["btn-wrap"]}>
+                  <div
+                    className={styles["button"]}
+                    onClick={(e) => deleteOrder(e, item.id)}
+                  >
+                    删除订单
                   </div>
                 </div>
               )}

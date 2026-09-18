@@ -1,5 +1,5 @@
 import { useRef, useState, type MouseEvent } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Form, Input, Button, Toast, Dialog, Checkbox } from "antd-mobile";
 import type { FormInstance } from "antd-mobile/es/components/form/form";
 
@@ -24,6 +24,7 @@ const rules = {
 
 const Login = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const formRef = useRef<FormInstance | null>(null);
   const [active, setActive] = useState(0);
   const [checked, setChecked] = useState(true); // 是否同意用户协议
@@ -53,8 +54,17 @@ const Login = () => {
     const loginData = res.data
     Toast.show({ content: res.message });
     signIn(loginData.accessToken, loginData.user)
-    // 暂，后续修改成哪个页面跳转来就跳回原先页面
-    navigate("/user")
+
+    const redirect = searchParams.get("redirect");
+    const hasValidRedirect =
+      redirect?.startsWith("/") && !redirect.startsWith("//");
+
+    if (hasValidRedirect && window.history.length > 1) {
+      navigate(-1);
+      return;
+    }
+
+    navigate("/user", { replace: true });
   };
 
   return (
