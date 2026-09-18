@@ -13,7 +13,7 @@ const Address = () => {
   const [searchParams] = useSearchParams();
   const mode = searchParams.get("mode");
   const location = useLocation();
-  const formPath = (location.state?.from as string) || "/";
+  const formPath = (location.state?.from as string) || "/user";
   const [addressList, setAddressList] = useState<AddressItem[]>([]);
   const [selectedAddressId, setSelectedAddressId] = useState<number | null>(
     null,

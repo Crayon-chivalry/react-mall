@@ -40,7 +40,7 @@ const actionsItems = [
 
 const User = () => {
   const navigate = useNavigate();
-  const { user } = useUserStore();
+  const { user, isLoggedIn } = useUserStore();
   const [badges, setBadges] = useState<OrderBadgeMap>({
     pending: 0,
     paid: 0,
@@ -63,16 +63,30 @@ const User = () => {
   };
 
   useEffect(() => {
-    getOrderBadges();
+    if (isLoggedIn) {
+      getOrderBadges();
+    }
   }, []);
 
   return (
     <>
       <div className={styles["user"]}>
-        <img src={user?.avatar || "/src/assets/images/tx.png"} className={styles["avatar"]} />
+        <img
+          src={user?.avatar || "/src/assets/images/tx.png"}
+          className={styles["avatar"]}
+          onClick={() => navigate("/Settings")}
+        />
         <div>
-          <div className={styles["user-name"]}>{user?.nickname}</div>
-          <div className={styles["user-phone"]}>{maskPhone(user?.phone)}</div>
+          {isLoggedIn ? (
+            <>
+              <div className={styles["user-name"]}>{user?.nickname}</div>
+              <div className={styles["user-phone"]}>
+                {maskPhone(user?.phone)}
+              </div>
+            </>
+          ) : (
+            <div className={styles["user-name"]} onClick={() => navigate("/auth/login")}>未登录</div>
+          )}
         </div>
       </div>
 
@@ -113,10 +127,7 @@ const User = () => {
                 className={styles["actions-item"]}
                 onClick={() => handleNavigate(item.path)}
               >
-                <img
-                  src={item.icon}
-                  className={styles["actions-image"]}
-                />
+                <img src={item.icon} className={styles["actions-image"]} />
                 <div>{item.name}</div>
               </div>
             ))}
