@@ -30,7 +30,6 @@ const Category = () => {
   const getCategories = async () => {
     const { data: res } = await shopApi.categories({ page: 1, pageSize: 100 });
     const list = res.data.list;
-    console.log(list);
     setCategories(list);
     if (list.length > 0) {
       setActiveKey(String(list[0].id));

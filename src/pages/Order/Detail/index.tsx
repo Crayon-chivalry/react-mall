@@ -24,7 +24,7 @@ const OrderStatusNames: Record<string, string> = {
 };
 
 const OrderDetail = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const orderId = searchParams.get("id");
   const [order, setOrder] = useState<OrderItem | null>(null);
@@ -77,8 +77,8 @@ const OrderDetail = () => {
           icon: "success",
         });
         setTimeout(() => {
-          navigate(-1)
-        }, 500)
+          navigate(-1);
+        }, 500);
       },
     });
   };
@@ -123,7 +123,10 @@ const OrderDetail = () => {
             {order.items.map((item) => (
               <div className={styles["goods-item"]} key={item.id}>
                 <div className={styles["goods-content"]}>
-                  <div className={styles["goods-cover"]}>
+                  <div
+                    className={styles["goods-cover"]}
+                    onClick={() => navigate("/product?id=" + item.product.id)}
+                  >
                     <img src={item.productCover} />
                   </div>
                   <div>
