@@ -31,7 +31,7 @@ const Settings = () => {
 
   // 修改资料
   const updateProfile = async (params: UpdateProfileParams) => {
-    const { data: res } = await userApi.updateProfile(params);
+    const res = await userApi.updateProfile(params);
     updateUser(params);
     Toast.show({
       content: res.message,

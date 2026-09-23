@@ -22,7 +22,7 @@ const ImageUploader = (props: PublicImageUploaderProps) => {
   } = props;
 
   const upload = async (file: File): Promise<ImageUploadItem> => {
-    const { data: response } = await uploadApi.image(file);
+    const response = await uploadApi.image(file);
     return {
       key: `${file.name}-${file.lastModified}-${file.size}-${Date.now()}`,
       url: response.data.url,

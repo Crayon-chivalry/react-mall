@@ -23,14 +23,14 @@ const Home = () => {
 
   // 获取轮播图
   const getBanners = async () => {
-    const { data: res } = await contentApi.banners();
+    const res = await contentApi.banners();
     setBanners(res.data);
   };
 
   // 获取商品列表
   const { list, hasMore, refresh, loadMore } = usePagination<ProductItem>({
     fetcher: async (page, pageSize) => {
-      const { data: res } = await shopApi.goodsList({
+      const res = await shopApi.goodsList({
         page,
         pageSize,
       });

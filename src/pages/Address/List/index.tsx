@@ -48,7 +48,7 @@ const Address = () => {
   // 设置默认地址
   const checkChange = async (val: boolean, id: number) => {
     if (!val) return;
-    const { data: res } = await addressApi.setDefault(id);
+    const res = await addressApi.setDefault(id);
     Toast.show({ icon: "success", content: res.message });
     setTimeout(() => {
       getAddress();
@@ -61,7 +61,7 @@ const Address = () => {
     Dialog.confirm({
       content: "确定要删除吗？",
       onConfirm: async () => {
-        const { data: res } = await addressApi.delete(id);
+        const res = await addressApi.delete(id);
         Toast.show({ icon: "success", content: res.message });
         getAddress();
       },
@@ -70,7 +70,7 @@ const Address = () => {
 
   // 获取地址列表
   const getAddress = async () => {
-    const { data: res } = await addressApi.list();
+    const res = await addressApi.list();
     setAddressList(res.data);
 
     if (mode !== "select") {

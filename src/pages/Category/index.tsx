@@ -28,7 +28,7 @@ const Category = () => {
 
   // 获取分类
   const getCategories = async () => {
-    const { data: res } = await shopApi.categories({ page: 1, pageSize: 100 });
+    const res = await shopApi.categories({ page: 1, pageSize: 100 });
     const list = res.data.list;
     setCategories(list);
     if (list.length > 0) {

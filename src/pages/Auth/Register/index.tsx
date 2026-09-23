@@ -53,7 +53,7 @@ const Register = () => {
 
   // 提交
   const handleSubmit = async (values: RegisterParams) => {
-    const { data: res } = await userApi.register({
+    const res = await userApi.register({
       phone: values.phone,
       password: values.password,
       nickname: values.nickname

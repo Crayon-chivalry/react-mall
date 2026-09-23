@@ -60,7 +60,7 @@ const OrderConfirm = () => {
 
   // 获取默认地址
   const getAddressDefault = async () => {
-    const { data: res } = await addressApi.default();
+    const res = await addressApi.default();
     setAddress(res.data);
   };
 
@@ -78,7 +78,7 @@ const OrderConfirm = () => {
       });
       return;
     }
-    const { data: res } = await shopApi.orderCreate({
+    const res = await shopApi.orderCreate({
       shippingAddressId: address?.id,
       items: checkoutItems.map((item) => ({
         productId: item.product.id,

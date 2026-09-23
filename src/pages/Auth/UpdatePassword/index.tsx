@@ -33,7 +33,7 @@ const UpdatePassword = () => {
 
   // 提交
   const handleSubmit = async (values: UpdatePasswordParams) => {
-    const { data: res } = await userApi.updatePassword({
+    const res = await userApi.updatePassword({
       oldPassword: values.oldPassword,
       newPassword: values.newPassword
     })

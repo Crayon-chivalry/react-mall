@@ -37,7 +37,7 @@ const PaymentPopup = ({visible, order, handleClose, success}: PaymentProps) => {
       });
       return
     }
-    const { data: res } = await shopApi.orderPayment(order.id, type)
+    const res = await shopApi.orderPayment(order.id, type)
     Toast.show({
       content: res.message,
       icon: "success"

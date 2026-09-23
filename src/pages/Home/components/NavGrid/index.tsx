@@ -50,7 +50,7 @@ const HomeNavGrid = ({ pageSize = 10 }: Props) => {
     let active = true;
 
     const fetchEntries = async () => {
-      const { data: res } = await contentApi.homeEntries();
+      const res = await contentApi.homeEntries();
       if (active) setEntries(res.data);
     };
 

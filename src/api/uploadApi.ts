@@ -1,5 +1,4 @@
 import request from "./request";
-import type { ApiResponse } from "./types";
 
 interface UploadImageData {
   url: string;
@@ -10,6 +9,6 @@ export const uploadApi = {
     const formData = new FormData();
     formData.append("file", file);
 
-    return request.post<ApiResponse<UploadImageData>>("/uploads/images", formData);
+    return request.post<UploadImageData>("/uploads/images", formData);
   },
 };

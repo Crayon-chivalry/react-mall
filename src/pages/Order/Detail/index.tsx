@@ -39,7 +39,7 @@ const OrderDetail = () => {
       content: "确定要取消订单吗？",
       onConfirm: async () => {
         if (!orderId) return;
-        const { data: res } = await shopApi.cancelOrder(Number(orderId));
+        const res = await shopApi.cancelOrder(Number(orderId));
         Toast.show({
           content: res.message,
           icon: "success",
@@ -55,7 +55,7 @@ const OrderDetail = () => {
       content: "确定要收货吗？",
       onConfirm: async () => {
         if (!orderId) return;
-        const { data: res } = await shopApi.confirmOrder(Number(orderId));
+        const res = await shopApi.confirmOrder(Number(orderId));
         Toast.show({
           content: res.message,
           icon: "success",
@@ -71,7 +71,7 @@ const OrderDetail = () => {
       content: "确定要删除订单吗？",
       onConfirm: async () => {
         if (!orderId) return;
-        const { data: res } = await shopApi.deleteOrder(Number(orderId));
+        const res = await shopApi.deleteOrder(Number(orderId));
         Toast.show({
           content: res.message,
           icon: "success",
@@ -86,7 +86,7 @@ const OrderDetail = () => {
   // 获取订单信息
   const getOrderDetail = async () => {
     if (!orderId) return;
-    const { data: res } = await shopApi.orderDetail(Number(orderId));
+    const res = await shopApi.orderDetail(Number(orderId));
     setOrder(res.data);
   };
 

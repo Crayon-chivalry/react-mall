@@ -15,7 +15,7 @@ const PromoSections = () => {
     let active = true;
 
     const fetchPromoSections = async () => {
-      const { data: res } = await contentApi.promoSections();
+      const res = await contentApi.promoSections();
       if (active) setList(res.data);
     };
 

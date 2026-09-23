@@ -45,7 +45,7 @@ const OrderList = () => {
   const { list, hasMore, refresh, loadMore, updateItem } =
     usePagination<OrderItem>({
       fetcher: async (page, pageSize) => {
-        const { data: res } = await shopApi.orderList({
+        const res = await shopApi.orderList({
           page,
           pageSize,
           ...(status !== "all" ? { status } : {}),
@@ -92,7 +92,7 @@ const OrderList = () => {
     Dialog.confirm({
       content: "确定要取消订单吗？",
       onConfirm: async () => {
-        const { data: res } = await shopApi.cancelOrder(id);
+        const res = await shopApi.cancelOrder(id);
         Toast.show({
           content: res.message,
           icon: "success",
@@ -112,7 +112,7 @@ const OrderList = () => {
     Dialog.confirm({
       content: "确定要收货吗？",
       onConfirm: async () => {
-        const { data: res } = await shopApi.confirmOrder(id);
+        const res = await shopApi.confirmOrder(id);
         Toast.show({
           content: res.message,
           icon: "success",
@@ -132,7 +132,7 @@ const OrderList = () => {
     Dialog.confirm({
       content: "确定要删除订单吗？",
       onConfirm: async () => {
-        const { data: res } = await shopApi.deleteOrder(id);
+        const res = await shopApi.deleteOrder(id);
         Toast.show({
           content: res.message,
           icon: "success",

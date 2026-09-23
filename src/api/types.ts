@@ -1,3 +1,5 @@
+import type { UserDataInterface } from "@/store/userStore";
+
 // 接口结构
 export interface ApiResponse<T = any> {
   code: number
@@ -11,12 +13,28 @@ export interface Pagination {
   pageSize: number
 }
 
+// 列表类接口通用载荷，后端分页接口统一返回 { list, pagination }
+export interface ListResult<T> {
+  list: T[]
+  pagination: PaginationResult
+}
+
+export interface PaginationResult {
+  total: number
+}
+
 
 // 登录
 export interface LoginParams {
   phone: number
   password: string
   code: number
+}
+
+// 登录返回的载荷
+export interface LoginResult {
+  accessToken: string
+  user: UserDataInterface
 }
 
 // 注册

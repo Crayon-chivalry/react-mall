@@ -58,7 +58,7 @@ const User = () => {
 
   // 获取订单徽标数
   const getOrderBadges = async () => {
-    const { data: res } = await shopApi.orderBadges();
+    const res = await shopApi.orderBadges();
     setBadges(res.data);
   };
 

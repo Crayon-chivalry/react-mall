@@ -49,7 +49,7 @@ const useCartStore = create<CartStore>()(
       cartList: [],
       checkoutItems: [],
       fetchCartList: async () => {
-        const { data: res } = await shopApi.carts();
+        const res = await shopApi.carts();
 
         const payload = res.data ?? {};
         const list = Array.isArray(payload)

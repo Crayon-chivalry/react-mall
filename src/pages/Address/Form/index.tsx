@@ -82,7 +82,7 @@ const AddressForm = () => {
       city: getPickerLabelText(formAreaItems[1]),
       district: getPickerLabelText(formAreaItems[2]),
     }
-    const { data: res } = addressId ? await addressApi.update(Number(addressId), params)
+    const res = addressId ? await addressApi.update(Number(addressId), params)
     : await addressApi.add(params)
     Toast.show({ icon: 'success', content: res.message })
     setTimeout(() => {
@@ -92,7 +92,7 @@ const AddressForm = () => {
 
   // 获取地址详情
   const getAddress = async () => {
-    const { data: res } = await addressApi.details(Number(addressId))
+    const res = await addressApi.details(Number(addressId))
     const addressData = res.data as AddressItem & {
       province?: string;
       city?: string;

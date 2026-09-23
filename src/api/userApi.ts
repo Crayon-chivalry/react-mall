@@ -1,24 +1,24 @@
 import request from "./request";
-import type { ApiResponse, RegisterParams, LoginParams, UpdatePasswordParams, UpdateProfileParams } from './types'
+import type { LoginResult, RegisterParams, LoginParams, UpdatePasswordParams, UpdateProfileParams } from './types'
 
 export const userApi = {
   // 注册
   register: (params: RegisterParams) => {
-    return request.post<ApiResponse>("/users", params)
+    return request.post("/users", params)
   },
 
   // 登录
   login: (params: LoginParams) => {
-    return request.post<ApiResponse>("/auth/login", params)
+    return request.post<LoginResult>("/auth/login", params)
   },
 
   // 修改密码
   updatePassword: (params: UpdatePasswordParams) => {
-    return request.post<ApiResponse>("/users/password", params)
+    return request.post("/users/password", params)
   },
 
   // 修改资料
   updateProfile: (params: UpdateProfileParams) => {
-    return request.patch<ApiResponse>("/users/profile", params)
+    return request.patch("/users/profile", params)
   },
 }

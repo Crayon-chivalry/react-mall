@@ -92,7 +92,7 @@ const Product = () => {
 
   const getGoods = async () => {
     if (!goodsId) return;
-    const { data: res } = await shopApi.goods(Number(goodsId));
+    const res = await shopApi.goods(Number(goodsId));
     setPageData(res.data);
   };
 

@@ -50,7 +50,7 @@ const Login = () => {
 
   // 提交
   const handleSubmit = async (values: LoginParams) => {
-    const { data: res } = await userApi.login(values)
+    const res = await userApi.login(values)
     const loginData = res.data
     Toast.show({ content: res.message });
     signIn(loginData.accessToken, loginData.user)

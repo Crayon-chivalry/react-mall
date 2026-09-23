@@ -19,7 +19,7 @@ const ProductList = () => {
   // 获取商品列表
   const { list, hasMore, refresh, loadMore } = usePagination<ProductItem>({
     fetcher: async (page, pageSize) => {
-      const { data: res } = await shopApi.goodsList({
+      const res = await shopApi.goodsList({
         page,
         pageSize,
         keyword: keyword,
