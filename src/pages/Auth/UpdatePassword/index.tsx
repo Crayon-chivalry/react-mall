@@ -9,7 +9,6 @@ import AppNavBar from "@/components/AppNavBar";
 
 // 表单验证规则
 const rules = {
-  phone: [{ required: true, message: "手机号不能为空" }],
   oldPassword: [{ required: true, message: "旧密码不能为空" }],
   newPassword: [{ required: true, message: "新密码不能为空" }],
   confirmPassword: [
