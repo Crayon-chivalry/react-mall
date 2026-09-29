@@ -145,7 +145,7 @@ const OrderDetail = () => {
               </div>
             ))}
             <div className={styles["order-total"]}>
-              共1件商品 合计：<strong>¥{order.totalAmount}</strong>
+              共{order.items.length}件商品 合计：<strong>¥{order.totalAmount}</strong>
             </div>
           </div>
 
