@@ -198,7 +198,7 @@ const OrderList = () => {
             </div>
             <div className={styles["order-footer"]}>
               <div className={styles["order-total"]}>
-                共1件商品 合计：<strong>¥{item.totalAmount}</strong>
+                共{item.items.length}件商品 合计：<strong>¥{item.totalAmount}</strong>
               </div>
 
               {item.status === "pending" && (
