@@ -32,7 +32,7 @@ const OrderConfirm = () => {
 
   // 总计
   const totalAmount = checkoutItems.reduce(
-    (total, item) => total + Number(item.sku.price),
+    (total, item) => total + Number(item.sku.price) * item.quantity,
     0,
   );
 
