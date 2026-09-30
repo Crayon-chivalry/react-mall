@@ -40,7 +40,7 @@ const normalizeCartItem = (item: any): CartItem => ({
   product: item.product,
   sku: item.sku,
   quantity: item.quantity,
-  checked: true,
+  checked: false, // 默认不选
 });
 
 const useCartStore = create<CartStore>()(
